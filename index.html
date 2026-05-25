@@ -354,11 +354,12 @@ Fiecare nod conține:<br>
 Elementele <strong>nu sunt în memorie contiguă</strong> — pot fi oriunde în memorie, legate doar prin pointeri.`,
       vox:`Un LinkedList este o structură de date liniară formată din noduri legate prin referințe. Fiecare nod conține val, adică valoarea stocată, și next, adică referința spre nodul următor. Elementele nu sunt în memorie contiguă — pot fi oriunde în memorie, legate doar prin pointeri.`
     },
-    { lbl:'🔗 Analogia — Lanțul de Cutii',
-      html:`Fiecare cutie conține un bilet cu o valoare și o săgeată spre cutia următoare.<br><br>
-Cutiile nu trebuie să fie una lângă alta — contează doar că fiecare știe unde e cea următoare.<br><br>
-Prima cutie = <strong>head</strong>. Ultima cutie are săgeata spre <em>null</em>.`,
-      vox:`Fiecare cutie conține un bilet cu o valoare și o săgeată spre cutia următoare. Cutiile nu trebuie să fie una lângă alta — contează doar că fiecare știe unde e cea următoare. Prima cutie se numește head. Ultima cutie are săgeata spre null — nimeni nu urmează.`
+    { lbl:'🚂 Analogia — Trenul de Vagoane',
+      html:`Gândește-te la un tren de marfă. Fiecare vagon are în interior o marfă — valoarea noastră — și o <strong>cuplă în spate</strong> care se agață de vagonul următor.<br><br>
+Vagoanele pot fi parcate oriunde în gară, nu trebuie să stea alăturate — contează doar că fiecare știe la ce vagon e cupl.<br><br>
+Primul vagon = <strong>head</strong>. Ultimul vagon nu are cuplă în spate — acolo scrie <em>null</em>.<br><br>
+<strong>Diferența față de array:</strong> La bloc mergi direct la etajul 7. La tren treci obligatoriu prin vagonul 1, 2, 3, 4, 5, 6, 7. Nu există scurtătură.`,
+      vox:`Gândește-te la un tren de marfă. Fiecare vagon are în interior o marfă — asta e valoarea noastră — și o cuplă în spate care se agață de vagonul următor. Vagoanele pot fi parcate oriunde în gară, nu trebuie să stea alăturate — contează doar că fiecare vagon știe la ce vagon e cuplat. Primul vagon se numește head, e locomotiva. Ultimul vagon nu are cuplă în spate, acolo scrie null — nimeni nu urmează. Și iată diferența fundamentală față de array: în blocul cu apartamente poți merge direct la etajul șapte fără să treci prin celelalte. În tren trebuie să treci prin vagonul unu, doi, trei, patru, cinci, șase, șapte. Nu există scurtătură.`
     },
     { lbl:'☕ Structura Nodului în Java',
       html:``,
@@ -491,7 +492,15 @@ Operații principale — toate <strong>O(1)</strong>:<br>
 • <em>push</em> — adaugă deasupra<br>
 • <em>pop</em> — extrage de deasupra<br>
 • <em>peek</em> — citește vârful fără a-l șterge`,
-      vox:`Un Stack este o structură de date LIFO — Last In, First Out. Ultimul element adăugat este primul extras. Gândește-te la o stivă de farfurii: pui și iei doar de deasupra. Operațiile principale sunt toate O de unu: push adaugă deasupra, pop extrage de deasupra, peek citește vârful fără a-l șterge.`
+      vox:`Un Stack este o structură de date LIFO — Last In, First Out. Ultimul element adăugat este primul extras. Operațiile principale sunt toate O de unu: push adaugă deasupra, pop extrage de deasupra, peek citește vârful fără a-l șterge.`
+    },
+    { lbl:'🍽️ Povestea — Stiva de Farfurii și Coada la Ghișeu',
+      html:`Imaginează-ți că ești chelner la un restaurant aglomerat.<br><br>
+La sfârșitul zilei, speli farfuriile și le <strong>stivuiești una peste alta</strong>. Dimineața, când un client comandă, iei farfuria <em>de deasupra</em> — cea spălată ultima. Nu poți lua o farfurie de la mijlocul stivei fără să le dai jos pe celelalte. Aceasta este logica <strong>Stack-ului</strong>: Last In, First Out.<br><br>
+Acum imaginează-ți că același restaurant are o coadă de clienți la intrare. Primul client intrat este primul servit. Al doilea client intrat este al doilea servit. Nimeni nu poate sări coada. Aceasta este logica <strong>Queue-ului</strong>: First In, First Out.<br><br>
+<strong>Stack:</strong> stiva de farfurii → intri ultimul, ieși primul.<br>
+<strong>Queue:</strong> coada la restaurant → intri primul, ieși primul.`,
+      vox:`Imaginează-ți că ești chelner la un restaurant aglomerat. La sfârșitul zilei, speli farfuriile și le stivuiești una peste alta. Dimineața, când un client comandă, iei farfuria de deasupra — cea spălată ultima. Nu poți lua o farfurie de la mijlocul stivei fără să le dai jos pe celelalte. Aceasta este logica Stack-ului: Last In, First Out. Ultimul intrat, primul ieșit. Acum imaginează-ți că același restaurant are o coadă de clienți la intrare. Primul client intrat este primul servit. Al doilea client intrat este al doilea servit. Nimeni nu poate sări coada. Aceasta este logica Queue-ului: First In, First Out. Primul intrat, primul ieșit. Cele două structuri sunt opuse, dar la fel de esențiale.`
     },
     { lbl:'☕ Stack în Java',
       html:`Evită clasa <em>Stack</em> (legacy). Folosește <strong>ArrayDeque</strong>.`,
@@ -575,6 +584,14 @@ Internamente folosește o <em>funcție hash</em> care calculează în ce bucket 
 Acces, inserare, ștergere: <strong>O(1) amortizat</strong>.<br>
 Fără ordine garantată a elementelor.`,
       vox:`Un HashMap stochează perechi cheie valoare. Internamente folosește o funcție hash care calculează în ce bucket se pune fiecare pereche. Aceasta permite acces, inserare și ștergere în O de unu amortizat. Nu există ordine garantată a elementelor.`
+    },
+    { lbl:'📚 Povestea — Dicționarul Magic',
+      html:`Imaginează-ți un <strong>dicționar bilingv</strong> magic — nu cel obișnuit, ci unul cu o proprietate extraordinară.<br><br>
+Într-un dicționar normal, dacă vrei să cauți cuvântul <em>"arbore"</em>, deschizi la litera A și parcurgi pagini până îl găsești. Dacă dicționarul are 100.000 de cuvinte, poți să cauți mult timp.<br><br>
+Dicționarul magic funcționează diferit: <strong>spui cuvântul în gând</strong>, și dicționarul se deschide <em>instant</em> la pagina exactă unde se află. Nu contează dacă are zece sau zece milioane de cuvinte — tot <strong>instant</strong>.<br><br>
+Secretul este <em>funcția hash</em>: un algoritm matematic care transformă cuvântul într-un număr de pagină. Același cuvânt produce mereu același număr de pagină.<br><br>
+<strong>HashMap</strong> este acel dicționar magic. Cheia este cuvântul. Valoarea este definiția. Accesul este instant — <strong>O(1)</strong>.`,
+      vox:`Imaginează-ți un dicționar bilingv magic. Într-un dicționar normal, dacă vrei să cauți cuvântul arbore, deschizi la litera A și parcurgi pagini până îl găsești. Dacă dicționarul are o sută de mii de cuvinte, poți să cauți mult timp. Dicționarul magic funcționează diferit: spui cuvântul în gând, și dicționarul se deschide instant la pagina exactă unde se află. Nu contează dacă are zece sau zece milioane de cuvinte — tot instant. Secretul este funcția hash: un algoritm matematic care transformă cuvântul într-un număr de pagină. Același cuvânt produce mereu același număr de pagină. HashMap este acel dicționar magic. Cheia este cuvântul. Valoarea este definiția. Accesul este O de unu — constant, indiferent de dimensiune.`
     },
     { lbl:'☕ HashMap — Metode esențiale',
       code:`import java.util.HashMap;
@@ -687,6 +704,14 @@ Dacă complementul există în map, am găsit perechea. Altfel, adăugăm elemen
 • <strong>Leaves</strong> — noduri fără copii<br>
 • <strong>Înălțimea (h)</strong> — numărul maxim de noduri de la root la o frunză`,
       vox:`Un arbore binar este o structură ierarhică în care fiecare nod are cel mult doi copii: left și right. Root este nodul de la vârf. Leaves sunt nodurile fără copii. Înălțimea arborelui este numărul maxim de noduri de la root la o frunză.`
+    },
+    { lbl:'🏢 Povestea — Organigrama Companiei',
+      html:`Gândește-te la <strong>organigrama unei companii mari</strong>.<br><br>
+În vârf se află <em>CEO-ul</em> — acesta este <strong>root-ul</strong>. CEO-ul are doi directori generali sub el: Directorul de Operațiuni și Directorul Tehnic. Fiecare director are manageri sub el, fiecare manager are angajați. Angajații care nu au pe nimeni sub ei se numesc <strong>frunze</strong> — leaves.<br><br>
+Dacă vrei să trimiți un mesaj de la CEO la un angajat de la baza ierarhiei, urmezi calea de sus în jos: CEO → Director → Manager → Angajat. Aceasta este o <em>traversare DFS — Depth First Search</em>.<br><br>
+Dacă vrei să afli toți angajații de pe un anumit nivel ierarhic, parcurgi organigrama nivel cu nivel. Aceasta este o <em>traversare BFS — Breadth First Search</em>.<br><br>
+<strong>Regula de aur:</strong> un arbore binar are cel mult <strong>doi copii</strong> pe nod. Ca un manager care are cel mult doi subordonați direcți.`,
+      vox:`Gândește-te la organigrama unei companii mari. În vârf se află CEO-ul — acesta este root-ul. CEO-ul are doi directori generali sub el: Directorul de Operațiuni și Directorul Tehnic. Fiecare director are manageri sub el, fiecare manager are angajați. Angajații care nu au pe nimeni sub ei se numesc frunze — leaves. Dacă vrei să trimiți un mesaj de la CEO la un angajat de la baza ierarhiei, urmezi calea de sus în jos. Aceasta este o traversare DFS — în adâncime. Dacă vrei să afli toți angajații de pe un anumit nivel ierarhic, parcurgi organigrama nivel cu nivel. Aceasta este o traversare BFS — pe lățime. Regula de aur: un arbore binar are cel mult doi copii pe nod.`
     },
     { lbl:'☕ Structura nodului în Java',
       code:`class TreeNode {
@@ -804,6 +829,20 @@ Complexitate: <strong>O(log n)</strong> — pentru 1.000.000 de elemente, maxim 
 <strong>Condiție necesară: colecția trebuie să fie sortată.</strong>`,
       vox:`Binary Search caută într-o colecție sortată eliminând jumătate din candidați la fiecare pas. Complexitate: O de log n. Pentru un milion de elemente, maxim douăzeci de comparații. Condiție necesară: colecția trebuie să fie sortată.`
     },
+    { lbl:'🎲 Povestea — Jocul de Ghicit Numărul',
+      html:`Ai jucat vreodată jocul: <em>„Mă gândesc la un număr între 1 și 100. Ghicește!"</em>?<br><br>
+Un jucător naiv începe de la 1, 2, 3... și poate face 100 de încercări. Dar jucătorul inteligent spune mereu: <strong>„Este 50?"</strong><br><br>
+— „Mai mare!"<br>
+— „75?"<br>
+— „Mai mic!"<br>
+— „62?"<br>
+— „Mai mic!"<br>
+— „56?"<br>
+— „Exact!"<br><br>
+Patru încercări pentru 100 de numere. Logica este simplă: <strong>la fiecare pas, eliminăm jumătate din posibilități</strong>. Nu verificăm fiecare număr — înjumătățim spațiul de căutare.<br><br>
+Acesta este <strong>Binary Search</strong>. Funcționează pe orice <em>colecție sortată</em>. Dacă elementele nu ar fi în ordine, nu am ști în ce direcție să ne ducem după fiecare comparație.`,
+      vox:`Ai jucat vreodată jocul: mă gândesc la un număr între unu și o sută, ghicește? Un jucător naiv începe de la unu, doi, trei... și poate face o sută de încercări. Dar jucătorul inteligent spune mereu: cincizeci. Mai mare! Șaptezeci și cinci. Mai mic! Șaizeci și doi. Mai mic! Cincizeci și șase. Exact! Patru încercări pentru o sută de numere. Logica este simplă: la fiecare pas, eliminăm jumătate din posibilități. Nu verificăm fiecare număr — înjumătățim spațiul de căutare. Acesta este Binary Search. Funcționează pe orice colecție sortată. Dacă elementele nu ar fi în ordine, nu am ști în ce direcție să ne ducem după fiecare comparație.`
+    },
     { lbl:'☕ Template iterativ standard',
       html:`Cei trei pointeri: <em>left</em>, <em>right</em>, <em>mid</em>.<br><br>
 Calculul mid: <code>left + (right - left) / 2</code> — evită overflow față de <code>(left + right) / 2</code>.`,
@@ -892,6 +931,14 @@ Operații:<br>
 • Citire min/max: <strong>O(1)</strong>`,
       vox:`Un Heap este un arbore binar complet cu proprietate de ordine. Min-Heap: fiecare nod este mai mic sau egal cu copiii săi, deci rădăcina este minimul global. Max-Heap: fiecare nod este mai mare sau egal cu copiii săi, deci rădăcina este maximul global. Inserare și extragere: O de log n. Citire min sau max: O de unu.`
     },
+    { lbl:'🏥 Povestea — Sala de Urgențe',
+      html:`Imaginează-ți <strong>sala de așteptare a unui spital de urgențe</strong>.<br><br>
+Pacienții nu sunt tratați în ordinea sosirii. O persoană cu o tăietură mică la deget care a venit prima nu va fi tratată înaintea unui pacient cu atac de cord care a venit mai târziu. <strong>Prioritatea contează, nu momentul sosirii.</strong><br><br>
+Fiecare pacient primește un <em>cod de urgență</em>: roșu (critic), galben (moderat), verde (minor). Medicul ia mereu pacientul cu codul cel mai critic — cel mai mic număr de prioritate.<br><br>
+Aceasta este exact logica unui <strong>Min-Heap</strong>: elementul cu valoarea minimă este mereu la vârf, gata să fie extras. Când un nou pacient sosește, se inserează în sistem în <strong>O(log n)</strong>. Când medicul cheamă, extrage pacientul cel mai critic în <strong>O(log n)</strong>.<br><br>
+<em>Max-Heap</em> ar fi invers: cel mai mare număr la vârf — cel mai puțin urgent ar fi tratat primul. Evident, nu vrei asta la urgențe!`,
+      vox:`Imaginează-ți sala de așteptare a unui spital de urgențe. Pacienții nu sunt tratați în ordinea sosirii. O persoană cu o tăietură mică la deget care a venit prima nu va fi tratată înaintea unui pacient cu atac de cord care a venit mai târziu. Prioritatea contează, nu momentul sosirii. Fiecare pacient primește un cod de urgență: roșu critic, galben moderat, verde minor. Medicul ia mereu pacientul cu codul cel mai critic — cel mai mic număr de prioritate. Aceasta este exact logica unui Min-Heap: elementul cu valoarea minimă este mereu la vârf, gata să fie extras. Când un nou pacient sosește, se inserează în O de log n. Când medicul cheamă, extrage pacientul cel mai critic în O de log n. Max-Heap ar fi invers: cel mai mare număr la vârf. Evident, nu vrei asta la urgențe.`
+    },
     { lbl:'☕ PriorityQueue în Java',
       code:`import java.util.PriorityQueue;
 import java.util.Collections;
@@ -966,6 +1013,15 @@ public int kthLargest(int[] nums, int k) {
 • <strong>Ponderat:</strong> fiecare muchie are un cost<br>
 • <strong>Ciclic / Aciclic (DAG)</strong>`,
       vox:`Un graf este o colecție de noduri conectate prin muchii. Graful neorientat: muchia dintre A și B este bidirecțională. Graful orientat sau digraph: muchia de la A la B nu implică muchia de la B la A. Graful ponderat are un cost asociat fiecărei muchii. Un graf aciclic orientat se numește DAG.`
+    },
+    { lbl:'🚇 Povestea — Rețeaua de Metrou',
+      html:`Gândește-te la <strong>rețeaua de metrou din București</strong>.<br><br>
+Fiecare stație este un <em>nod</em>. Fiecare tronson de linie dintre două stații este o <em>muchie</em>. Poți merge de la orice stație la orice altă stație urmând liniile de metrou.<br><br>
+<em>Vrei să ajungi de la Piața Victoriei la Universitate?</em> Există mai multe rute posibile. <strong>BFS</strong> găsește ruta cu <em>cel mai mic număr de stații</em> — calea cea mai scurtă.<br><br>
+<em>Vrei să verifici dacă rețeaua este conectată</em> — dacă din orice stație poți ajunge la orice altă stație? <strong>DFS</strong> explorează toate conexiunile și confirmă conectivitatea.<br><br>
+<em>Ce se întâmplă dacă adăugăm prețuri pe bilete pentru fiecare tronson?</em> Graful devine <strong>ponderat</strong> — și problema devine: care rută e cea mai ieftină?<br><br>
+Rețelele sociale, internetul, hărțile — toate sunt grafuri. Este cea mai versatilă structură de date.`,
+      vox:`Gândește-te la rețeaua de metrou din București. Fiecare stație este un nod. Fiecare tronson de linie dintre două stații este o muchie. Poți merge de la orice stație la orice altă stație urmând liniile de metrou. Vrei să ajungi de la Piața Victoriei la Universitate? Există mai multe rute posibile. BFS găsește ruta cu cel mai mic număr de stații — calea cea mai scurtă. Vrei să verifici dacă rețeaua este conectată — dacă din orice stație poți ajunge la orice altă stație? DFS explorează toate conexiunile și confirmă conectivitatea. Ce se întâmplă dacă adăugăm prețuri pe bilete pentru fiecare tronson? Graful devine ponderat — și problema devine: care rută e cea mai ieftină? Rețelele sociale, internetul, hărțile — toate sunt grafuri. Este cea mai versatilă structură de date.`
     },
     { lbl:'☕ Reprezentare — Adjacency List',
       html:`Cea mai eficientă reprezentare pentru grafuri rare: fiecare nod are lista vecinilor săi.<br><br>
@@ -1082,6 +1138,14 @@ Cu <em>path compression</em> + <em>union by rank</em>: <strong>O(α(n)) ≈ O(1)
 2. <em>Substructură optimă</em> — soluția optimă conține soluțiile optime ale subproblemelor<br><br>
 DP <strong>memorează rezultatele</strong> subproblemelor pentru a evita recalcularea.`,
       vox:`Dynamic Programming se aplică problemelor cu două proprietăți. Prima: subprobleme suprapuse — aceleași subprobleme se rezolvă de mai multe ori în recursie simplă. A doua: substructură optimă — soluția optimă conține soluțiile optime ale subproblemelor. DP memorează rezultatele subproblemelor, transformând complexitatea exponențială în polinomială.`
+    },
+    { lbl:'📓 Povestea — Matematicianul cu Caietul de Notițe',
+      html:`Există un matematician care rezolvă probleme complexe.<br><br>
+Un coleg îl întreabă: <em>„Cât face Fibonacci de 40?"</em> Matematicianul naiv calculează recursiv, apelând Fibonacci de 39 plus Fibonacci de 38, și fiecare dintre acestea se descompun la rândul lor, și tot așa. <strong>Milioane de calcule, aceleași subprobleme recalculate de mii de ori.</strong><br><br>
+Matematicianul inteligent are un <strong>caiet de notițe</strong>. De fiecare dată când calculează un rezultat, îl scrie în caiet. Data viitoare când cineva îl întreabă același lucru, nu recalculează — <em>deschide caietul și citește răspunsul</em>.<br><br>
+Fibonacci de 38? Am calculat-o ieri — stă la pagina 38 din caiet. O secundă.<br><br>
+Aceasta este esența <strong>Dynamic Programming</strong>: <em>memorezi rezultatele subproblemelor</em> pentru a nu le recalcula. Caietul este structura noastră de date — un array sau un HashMap. Fiecare pagină este o subproblemă rezolvată o singură dată.`,
+      vox:`Există un matematician care rezolvă probleme complexe. Un coleg îl întreabă: cât face Fibonacci de patruzeci? Matematicianul naiv calculează recursiv, apelând Fibonacci de treizeci și nouă plus Fibonacci de treizeci și opt, și fiecare dintre acestea se descompun la rândul lor, și tot așa. Milioane de calcule, aceleași subprobleme recalculate de mii de ori. Matematicianul inteligent are un caiet de notițe. De fiecare dată când calculează un rezultat, îl scrie în caiet. Data viitoare când cineva îl întreabă același lucru, nu recalculează — deschide caietul și citește răspunsul. Fibonacci de treizeci și opt? Am calculat-o ieri — stă la pagina treizeci și opt din caiet. O secundă. Aceasta este esența Dynamic Programming: memorezi rezultatele subproblemelor pentru a nu le recalcula. Caietul este structura noastră de date — un array sau un HashMap. Fiecare pagină este o subproblemă rezolvată o singură dată.`
     },
     { lbl:'🔁 Memoization — Top-Down',
       html:`Recursie cu cache — pornești de la problema mare, o spargi în subprobleme, memorezi rezultatele.`,
