@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+
+# Vercel
+.vercel/
+
+# Env files locale (nu comite niciodată chei!)
+.env
+.env.local
+.env*.local
+
+# OS
+.DS_Store
+Thumbs.db

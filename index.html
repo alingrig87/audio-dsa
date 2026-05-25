@@ -19,6 +19,7 @@
   --dim: #9ca3af;
   --yellow: #fbbf24;
   --green: #10b981;
+  --red: #ef4444;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
@@ -26,7 +27,6 @@ body {
   background:var(--bg); color:var(--text);
   height:100vh; display:flex; flex-direction:column; overflow:hidden;
 }
-/* HEADER */
 .hdr {
   background:var(--surface); border-bottom:1px solid var(--border);
   padding:.6rem 1.5rem; display:flex; align-items:center; gap:.75rem; flex-shrink:0;
@@ -37,12 +37,10 @@ body {
 .hdr-right { margin-left:auto; display:flex; align-items:center; gap:.75rem; }
 select.voice-sel {
   background:var(--surface2); border:1px solid var(--border); color:var(--dim);
-  padding:.3rem .6rem; border-radius:6px; font-size:.72rem; cursor:pointer; max-width:220px;
+  padding:.3rem .6rem; border-radius:6px; font-size:.72rem; cursor:pointer; max-width:240px;
 }
 select.voice-sel:focus { outline:none; border-color:var(--accent); }
-/* LAYOUT */
 .layout { display:flex; flex:1; overflow:hidden; }
-/* SIDEBAR */
 .sidebar {
   width:250px; background:var(--surface); border-right:1px solid var(--border);
   overflow-y:auto; flex-shrink:0; padding:.6rem;
@@ -65,7 +63,6 @@ select.voice-sel:focus { outline:none; border-color:var(--accent); }
 .ep-sub { font-size:.68rem; color:var(--muted); }
 .ep-dur { font-size:.62rem; color:var(--muted); margin-top:.1rem; }
 .ep-lock { font-size:.65rem; color:var(--muted); }
-/* MAIN */
 .main { flex:1; overflow-y:auto; display:flex; flex-direction:column; }
 .ep-hdr { padding:1.5rem 2rem 1rem; border-bottom:1px solid var(--border); }
 .ep-hdr-top { display:flex; align-items:center; gap:.75rem; margin-bottom:.5rem; }
@@ -74,17 +71,7 @@ select.voice-sel:focus { outline:none; border-color:var(--accent); }
 .ep-main-title { font-size:1.5rem; font-weight:700; }
 .ep-main-sub { font-size:.9rem; color:var(--muted); }
 .ep-tags { display:flex; gap:.5rem; margin-top:.6rem; flex-wrap:wrap; }
-.tag {
-  font-size:.68rem; padding:.15rem .55rem; border-radius:20px;
-  background:var(--surface2); color:var(--dim); border:1px solid var(--border);
-}
-/* VOICE WARNING */
-.v-warn {
-  background:rgba(251,191,36,.1); border:1px solid rgba(251,191,36,.3);
-  color:var(--yellow); padding:.65rem 1rem; border-radius:8px;
-  font-size:.78rem; margin:1rem 2rem 0; display:none; line-height:1.5;
-}
-/* SECTIONS */
+.tag { font-size:.68rem; padding:.15rem .55rem; border-radius:20px; background:var(--surface2); color:var(--dim); border:1px solid var(--border); }
 .sections { padding:1.25rem 2rem; display:flex; flex-direction:column; gap:.9rem; }
 .sec {
   border-radius:10px; padding:1.1rem 1.3rem;
@@ -92,67 +79,38 @@ select.voice-sel:focus { outline:none; border-color:var(--accent); }
   transition:all .3s; cursor:pointer;
 }
 .sec:hover { border-color:rgba(99,102,241,.3); }
-.sec.active {
-  border-color:var(--accent); background:var(--surface2);
-  box-shadow:0 0 22px var(--glow);
-}
+.sec.active { border-color:var(--accent); background:var(--surface2); box-shadow:0 0 22px var(--glow); }
 .sec.done { opacity:.5; }
 .sec-lbl { font-size:.62rem; font-weight:700; color:var(--accent-l); text-transform:uppercase; letter-spacing:.08em; margin-bottom:.45rem; }
 .sec-text { font-size:.92rem; line-height:1.75; color:var(--text); }
 .sec-text strong { color:var(--yellow); font-weight:600; }
 .sec-text em { color:var(--accent-l); font-style:normal; }
-.sec-text br { display:block; content:""; margin-top:.4rem; }
 .code-block {
   background:#0a0a14; border:1px solid rgba(255,255,255,.08); border-radius:8px;
   padding:.9rem 1rem; margin-top:.75rem;
   font-family:'Consolas','Courier New',monospace; font-size:.8rem; line-height:1.65;
   overflow-x:auto; color:#abb2bf; white-space:pre;
 }
-/* CONTROLS */
-.ctrl {
-  background:var(--surface); border-top:1px solid var(--border);
-  padding:.7rem 1.5rem; flex-shrink:0;
-}
-.ctrl-inner {
-  max-width:620px; margin:0 auto;
-  display:flex; align-items:center; gap:.85rem;
-}
-.prog-wrap { flex:1; height:4px; background:var(--surface2); border-radius:2px; overflow:hidden; }
-.prog-bar {
-  height:100%; border-radius:2px;
-  background:linear-gradient(to right,var(--accent),var(--accent-l));
-  width:0%; transition:width .3s;
-}
-.btn {
-  border:none; cursor:pointer; display:flex; align-items:center;
-  justify-content:center; border-radius:50%; transition:all .2s;
-}
-.btn-play {
-  width:46px; height:46px; background:var(--accent);
-  color:#fff; font-size:1.1rem; flex-shrink:0;
-}
+.ctrl { background:var(--surface); border-top:1px solid var(--border); padding:.7rem 1.5rem; flex-shrink:0; }
+.ctrl-inner { max-width:640px; margin:0 auto; display:flex; align-items:center; gap:.85rem; }
+.prog-wrap { flex:1; height:4px; background:var(--surface2); border-radius:2px; overflow:hidden; cursor:pointer; }
+.prog-bar { height:100%; border-radius:2px; background:linear-gradient(to right,var(--accent),var(--accent-l)); width:0%; transition:width .3s; }
+.btn { border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; border-radius:50%; transition:all .2s; }
+.btn-play { width:46px; height:46px; background:var(--accent); color:#fff; font-size:1.1rem; flex-shrink:0; }
 .btn-play:hover { background:var(--accent-l); transform:scale(1.05); }
-.btn-skip {
-  width:34px; height:34px; background:var(--surface2);
-  color:var(--dim); font-size:.85rem;
-}
+.btn-play:disabled { background:var(--muted); cursor:not-allowed; transform:none; }
+.btn-skip { width:34px; height:34px; background:var(--surface2); color:var(--dim); font-size:.85rem; }
 .btn-skip:hover { background:var(--card); color:var(--text); }
-.spd-btn {
-  font-size:.7rem; font-weight:700; color:var(--muted);
-  background:var(--surface2); border:1px solid var(--border);
-  border-radius:6px; padding:.28rem .5rem; cursor:pointer; min-width:42px; text-align:center;
-}
+.spd-btn { font-size:.7rem; font-weight:700; color:var(--muted); background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:.28rem .5rem; cursor:pointer; min-width:42px; text-align:center; }
 .spd-btn:hover { color:var(--text); border-color:var(--accent); }
-.status { font-size:.7rem; color:var(--muted); min-width:60px; text-align:center; }
-/* Scrollbar */
+.status { font-size:.7rem; color:var(--muted); min-width:80px; text-align:center; white-space:nowrap; }
+.cached-dot { display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--green); margin-left:4px; vertical-align:middle; }
 ::-webkit-scrollbar { width:5px; }
 ::-webkit-scrollbar-track { background:transparent; }
 ::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:3px; }
-@media(max-width:600px) {
-  .sidebar { display:none; }
-  .sections { padding:.9rem; }
-  .ep-hdr { padding:1rem; }
-}
+@media(max-width:600px) { .sidebar{display:none;} .sections{padding:.9rem;} .ep-hdr{padding:1rem;} }
+@keyframes spin { to { transform:rotate(360deg); } }
+.loading-spin { display:inline-block; animation:spin .8s linear infinite; }
 </style>
 </head>
 <body>
@@ -161,10 +119,12 @@ select.voice-sel:focus { outline:none; border-color:var(--accent); }
   <div class="hdr-logo">🎧</div>
   <div>
     <div class="hdr-title">DSA Povești</div>
-    <div class="hdr-sub">Pregătire interviu Google • în Română</div>
+    <div class="hdr-sub">Pregătire interviu Google • Română • ElevenLabs</div>
   </div>
   <div class="hdr-right">
-    <select class="voice-sel" id="voiceSel" title="Alege vocea"></select>
+    <select class="voice-sel" id="voiceSel" title="Alege vocea ElevenLabs">
+      <option>⏳ Se încarcă vocile...</option>
+    </select>
   </div>
 </div>
 
@@ -188,7 +148,11 @@ select.voice-sel:focus { outline:none; border-color:var(--accent); }
 </div>
 
 <script>
-// ─── DATE EPISOADE ────────────────────────────────────────────────────────────
+// ─── CONFIG ───────────────────────────────────────────────────────────────────
+const ELEVEN_MODEL = 'eleven_multilingual_v2';
+let   VOICE_ID     = 'pFZP5JQG7iQjIQuC4Bku'; // Lily — multilingual, clară
+
+// ─── EPISOADE ─────────────────────────────────────────────────────────────────
 const EPISODES = [
 {
   id:1, emoji:'🏢', title:'Array-uri', subtitle:'Blocul cu Apartamente',
@@ -211,7 +175,7 @@ Fiecare apartament găzduiește exact un singur locatar — un număr, un text, 
     },
     {
       lbl:'☕ Declarare în Java',
-      html:`Cum construim un array în Java? Avem două variante:`,
+      html:`Cum construim un array în Java? Avem două variante principale:`,
       code:
 `// Varianta 1: array gol cu 10 locuri
 int[] bloc = new int[10];
@@ -221,7 +185,7 @@ int[] bloc = {5, 12, 3, 8, 1, 7, 4, 9, 2, 6};
 
 // Câte apartamente are blocul?
 int n = bloc.length;   // → 10   (FĂRĂ paranteze!)`,
-      vox:`Cum construim un array în Java? Avem două variante. Prima: declarăm un array gol cu zece locuri — int, bloc, egal, new int de zece. A doua: array-ul cu valori deja puse între acolade. Pentru a afla câte elemente are, folosim proprietatea point length — FĂRĂ paranteze.`
+      vox:`Cum construim un array în Java? Avem două variante principale. Prima: declarăm un array gol cu zece locuri. A doua: array-ul cu valori deja puse între acolade. Pentru a afla câte elemente are, folosim proprietatea punct length — fără paranteze.`
     },
     {
       lbl:'⚡ Acces Direct — O(1)',
@@ -257,20 +221,20 @@ Aceasta este <em>căutarea liniară</em> — complexitate <strong>O(n)</strong>.
       lbl:'⚠️ Inserare și Ștergere — O(n)',
       html:`Acum vine <strong>dezavantajul principal</strong> al array-ului.<br><br>
 Vrei să muți un nou locatar la etajul 3? <em>Toți cei de la etajul 3 în sus trebuie să se mute cu un etaj mai sus!</em> Etajul 3 → 4, etajul 4 → 5... și tot așa.<br><br>
-Dacă blocul are o mie de apartamente și inserezi la poziția 0, <strong>toate cele o mie de familii</strong> se mută. Inserarea în array are complexitate <strong>O(n)</strong>.<br><br>
+Dacă blocul are o mie de apartamente și inserezi la poziția 0, <strong>toate cele o mie de familii se mută</strong>. Inserarea în array are complexitate <strong>O(n)</strong>.<br><br>
 <strong>Sfat interviu:</strong> Dacă ai nevoie de inserări frecvente, folosește <em>ArrayList</em> sau <em>LinkedList</em>, nu array simplu!`,
-      vox:`Acum vine dezavantajul principal al array-ului. Vrei să muți un nou locatar la etajul trei? Toți cei de la etajul trei în sus trebuie să se mute cu un etaj mai sus! Etajul trei devine patru, patru devine cinci, și tot așa. Dacă blocul are o mie de apartamente și inserezi la poziția zero, toate cele o mie de familii se mută. Inserarea în array are complexitate O de n. Sfat de interviu: Dacă ai nevoie de inserări frecvente, folosește ArrayList sau LinkedList, nu array simplu!`
+      vox:`Acum vine dezavantajul principal al array-ului. Vrei să muți un nou locatar la etajul trei? Toți cei de la etajul trei în sus trebuie să se mute cu un etaj mai sus! Etajul trei merge la patru, patru merge la cinci, și tot așa. Dacă blocul are o mie de apartamente și inserezi la poziția zero, toate cele o mie de familii se mută. Inserarea în array are complexitate O de n. Sfat de interviu: Dacă ai nevoie de inserări frecvente, folosește ArrayList sau LinkedList, nu array simplu!`
     },
     {
       lbl:'🛠️ Metode Esențiale Java',
-      html:`Iată <strong>armele tale secrete</strong> din clasa <em>Arrays</em> — importă-o cu <em>import java.util.Arrays</em>:`,
+      html:`Iată <strong>armele tale secrete</strong> din clasa <em>Arrays</em> — importă cu <em>import java.util.Arrays</em>:`,
       code:
 `import java.util.Arrays;
 
 int[] arr = {5, 2, 8, 1, 9, 3};
 
 Arrays.sort(arr);
-// arr → {1, 2, 3, 5, 8, 9}   complexitate O(n log n)
+// arr → {1, 2, 3, 5, 8, 9}   O(n log n)
 
 Arrays.fill(arr, 0);
 // arr → {0, 0, 0, 0, 0, 0}
@@ -279,18 +243,18 @@ int[] copie = Arrays.copyOf(arr, 10);
 // primele 6 copiate, restul 0
 
 int[] sub = Arrays.copyOfRange(arr, 1, 4);
-// elementele de la index 1 pana la 3 (4 exclusiv)
+// elementele de la index 1, 2, 3 (4 exclusiv)
 
 System.out.println(Arrays.toString(arr));
 // Output: [0, 0, 0, 0, 0, 0]
 
-int len = arr.length;   // ← FĂRĂ paranteze!`,
-      vox:`Iată armele tale secrete din clasa Arrays. Trebuie să o imporți cu import java.util.Arrays. Arrays punct sort de arr — sortează în ordine crescătoare, cu complexitate O de n log n. Arrays punct fill de arr virgulă zero — umple toate pozițiile cu zero. Arrays punct copyOf de arr virgulă zece — face o copie cu zece locuri. Arrays punct copyOfRange de arr virgulă unu virgulă patru — copiază elementele de la indexul unu până la trei, patru exclusiv. Arrays punct toString de arr — transformă array-ul într-un String frumos pentru afișare. Și arr punct length, FĂRĂ paranteze, îți spune numărul de elemente.`
+int n = arr.length;   // ← FĂRĂ paranteze!`,
+      vox:`Iată armele tale secrete din clasa Arrays. Importă cu import java.util.Arrays. Arrays punct sort de arr sortează în ordine crescătoare, complexitate O de n log n. Arrays punct fill de arr virgulă zero umple toate pozițiile cu zero. Arrays punct copyOf de arr virgulă zece face o copie cu zece locuri. Arrays punct copyOfRange de arr virgulă unu virgulă patru copiază elementele de la indexul unu până la trei, patru exclusiv. Arrays punct toString de arr transformă array-ul într-un String frumos pentru afișare. Și arr punct length, fără paranteze, îți spune numărul de elemente.`
     },
     {
       lbl:'🎯 Pattern: Two Pointers',
       html:`<strong>Two Pointers</strong> este unul dintre cele mai folosite pattern-uri la Google.<br><br>
-<em>Problema:</em> Într-un array <strong>sortat</strong>, găsește două numere care adunate dau o țintă.<br><br>
+<em>Problemă:</em> Într-un array <strong>sortat</strong>, găsește două numere care adunate dau o țintă.<br><br>
 <em>Metoda naivă:</em> Verifici fiecare pereche posibilă → <strong>O(n²)</strong>. Prea lent!<br><br>
 <em>Metoda Two Pointers:</em><br>
 • Pui un deget <em>(left)</em> la primul element<br>
@@ -307,52 +271,50 @@ Rezultat: <strong>O(n)</strong> — de n ori mai rapid!`,
     while (left < right) {
         int sum = arr[left] + arr[right];
 
-        if (sum == target)  return new int[]{left, right};
+        if (sum == target)     return new int[]{left, right};
         else if (sum < target) left++;   // avem nevoie de mai mult
         else                   right--;  // avem nevoie de mai puțin
     }
-    return new int[]{};  // nu există
+    return new int[]{};   // nu există
 }`,
-      vox:`Two Pointers este unul dintre cele mai folosite pattern-uri la Google. Problema: Într-un array sortat, găsește două numere care adunate dau o țintă. Metoda naivă: Verifici fiecare pereche posibilă — O de n pătrat. Prea lent! Metoda Two Pointers: Pui un deget, pe care îl numim left, la primul element. Pui alt deget, pe care îl numim right, la ultimul element. Dacă suma e prea mare, muți right spre stânga. Dacă suma e prea mică, muți left spre dreapta. Continui până găsești sau pointerii se întâlnesc. Rezultatul este O de n — de n ori mai rapid! Aceasta este magia algoritmilor.`
+      vox:`Two Pointers este unul dintre cele mai folosite pattern-uri la Google. Problema: Într-un array sortat, găsește două numere care adunate dau o țintă. Metoda naivă: verifici fiecare pereche posibilă — O de n pătrat. Prea lent! Metoda Two Pointers: pui un deget, pe care îl numim left, la primul element. Pui alt deget, pe care îl numim right, la ultimul element. Dacă suma e prea mare, muți right spre stânga. Dacă suma e prea mică, muți left spre dreapta. Continui până găsești sau pointerii se întâlnesc. Rezultatul este O de n — de n ori mai rapid! Aceasta este magia algoritmilor.`
     },
     {
       lbl:'🪟 Pattern: Sliding Window',
       html:`<strong>Sliding Window</strong> — Fereastra Glisantă — este perfect pentru <em>subarray-uri consecutive</em>.<br><br>
-<em>Problema:</em> Găsește suma maximă a k elemente consecutive.<br><br>
-<em>Metoda naivă:</em> Calculezi suma pentru fiecare fereastră de la capăt → <strong>O(n·k)</strong>.<br><br>
+<em>Problemă:</em> Găsește suma maximă a k elemente consecutive.<br><br>
+<em>Metoda naivă:</em> Calculezi suma pentru fiecare fereastră de la zero → <strong>O(n·k)</strong>.<br><br>
 <em>Sliding Window:</em> Calculezi prima fereastră, apoi pentru fiecare pas: <strong>scazi primul element și adaugi cel nou</strong>. Nu recalculezi totul!<br><br>
 Este ca o cameră cu k ferestre care glisează de-a lungul blocului → <strong>O(n)</strong>!`,
       code:
 `public int sumaMaxima(int[] arr, int k) {
-    // Calculăm prima fereastră
     int suma = 0;
     for (int i = 0; i < k; i++) suma += arr[i];
 
     int max = suma;
 
-    // Glisăm fereastra spre dreapta
     for (int i = k; i < arr.length; i++) {
         suma += arr[i];      // adăugăm noul element din dreapta
         suma -= arr[i - k];  // scoatem elementul ieșit din stânga
         max = Math.max(max, suma);
     }
-    return max;   // O(n) !!
+    return max;   // O(n)!
 }`,
-      vox:`Sliding Window, sau Fereastra Glisantă, este perfect pentru subarray-uri consecutive. Problema: Găsește suma maximă a k elemente consecutive. Metoda naivă: Calculezi suma pentru fiecare fereastră de la capăt — O de n ori k. Sliding Window: Calculezi prima fereastră, apoi pentru fiecare pas scazi primul element și adaugi cel nou. Nu recalculezi totul! Este ca o cameră cu k ferestre care glisează de-a lungul blocului. Rezultatul este O de n — mult mai eficient!`
+      vox:`Sliding Window, sau Fereastra Glisantă, este perfect pentru subarray-uri consecutive. Problema: Găsește suma maximă a k elemente consecutive. Metoda naivă: calculezi suma pentru fiecare fereastră de la zero — O de n ori k. Sliding Window: calculezi prima fereastră, apoi pentru fiecare pas scazi primul element și adaugi cel nou. Nu recalculezi totul! Este ca o cameră cu k ferestre care glisează de-a lungul blocului. Rezultatul este O de n — mult mai eficient!`
     },
     {
       lbl:'🧠 Ghid de Decizie la Interviu',
-      html:`Când primești o problemă cu <strong>array-uri</strong> la Google, pune-ți aceste întrebări:<br><br>
+      html:`Când primești o problemă cu <strong>array-uri</strong> la Google, întreabă-te:<br><br>
 <strong>1. Este array-ul sortat?</strong><br>
 → Gândește-te la <em>Binary Search</em> sau <em>Two Pointers</em><br><br>
 <strong>2. Ai nevoie de subarray-uri consecutive?</strong><br>
 → Gândește-te la <em>Sliding Window</em><br><br>
 <strong>3. Ai nevoie să memorezi valori sau frecvențe?</strong><br>
 → Gândește-te la <em>HashMap sau HashSet</em><br><br>
-<strong>4. Ai nevoie de cel mai mare / cel mai mic element repetat?</strong><br>
+<strong>4. Ai nevoie de cel mai mare / mic element repetat?</strong><br>
 → Gândește-te la <em>Heap (PriorityQueue)</em><br><br>
-<strong>Complexități de memorat:</strong> Acces O(1) • Căutare O(n) • Inserare O(n) • Sortare O(n log n)`,
-      vox:`Când primești o problemă cu array-uri la Google, pune-ți aceste întrebări. Unu: Este array-ul sortat? Dacă da, gândește-te la Binary Search sau Two Pointers. Doi: Ai nevoie de subarray-uri consecutive? Gândește-te la Sliding Window. Trei: Ai nevoie să memorezi valori sau frecvențe? Gândește-te la HashMap sau HashSet. Patru: Ai nevoie de cel mai mare sau cel mai mic element repetat? Gândește-te la Heap sau PriorityQueue. Complexitățile de memorat: Acces O de unu. Căutare O de n. Inserare O de n. Sortare O de n log n.`
+<strong>Complexități de reținut:</strong> Acces O(1) &nbsp;•&nbsp; Căutare O(n) &nbsp;•&nbsp; Inserare O(n) &nbsp;•&nbsp; Sortare O(n log n)`,
+      vox:`Când primești o problemă cu array-uri la Google, întreabă-te aceste lucruri. Unu: Este array-ul sortat? Dacă da, gândește-te la Binary Search sau Two Pointers. Doi: Ai nevoie de subarray-uri consecutive? Gândește-te la Sliding Window. Trei: Ai nevoie să memorezi valori sau frecvențe? Gândește-te la HashMap sau HashSet. Patru: Ai nevoie de cel mai mare sau cel mai mic element repetat? Gândește-te la Heap sau PriorityQueue. Complexitățile de reținut: Acces O de unu. Căutare O de n. Inserare O de n. Sortare O de n log n.`
     },
     {
       lbl:'🎉 Rezumat — Episodul 1',
@@ -360,12 +322,12 @@ Este ca o cameră cu k ferestre care glisează de-a lungul blocului → <strong>
 ✅ Array = bloc de apartamente cu indici de la <strong>0</strong><br>
 ✅ Acces în <strong>O(1)</strong> — superputerea array-ului<br>
 ✅ Căutare în <strong>O(n)</strong> — bați la fiecare ușă<br>
-✅ Inserare/ștergere în <strong>O(n)</strong> — dezavantajul principal<br>
+✅ Inserare/Ștergere în <strong>O(n)</strong> — dezavantajul principal<br>
 ✅ Metode: <em>Arrays.sort, Arrays.fill, Arrays.copyOf, Arrays.toString</em><br>
 ✅ Pattern: <em>Two Pointers</em> → O(n²) devine O(n)<br>
 ✅ Pattern: <em>Sliding Window</em> → eficient pentru subarray-uri<br><br>
 <strong>Urmează Episodul 2: LinkedList — "Lanțul de Apartamente" 🔗</strong>`,
-      vox:`Felicitări! Ai terminat primul episod despre Array-uri! Iată ce ai învățat astăzi. Array-ul este ca un bloc de apartamente cu indici de la zero. Accesul este O de unu — superputerea array-ului. Căutarea este O de n — bați la fiecare ușă. Inserarea și ștergerea sunt O de n — dezavantajul principal. Metodele importante sunt Arrays.sort, Arrays.fill, Arrays.copyOf și Arrays.toString. Patternul Two Pointers reduce O de n pătrat la O de n. Patternul Sliding Window este eficient pentru subarray-uri consecutive. Data viitoare vom vorbi despre LinkedList — Lanțul de Apartamente. Mult succes!`
+      vox:`Felicitări! Ai terminat primul episod despre Array-uri! Iată ce ai învățat astăzi. Array-ul este ca un bloc de apartamente cu indici de la zero. Accesul este O de unu — superputerea array-ului. Căutarea este O de n — bați la fiecare ușă. Inserarea și ștergerea sunt O de n — dezavantajul principal. Metodele importante sunt Arrays punct sort, Arrays punct fill, Arrays punct copyOf și Arrays punct toString. Patternul Two Pointers reduce O de n pătrat la O de n. Patternul Sliding Window este eficient pentru subarray-uri consecutive. Data viitoare vom vorbi despre LinkedList — Lanțul de Apartamente. Mult succes!`
     }
   ]
 },
@@ -380,68 +342,184 @@ Este ca o cameră cu k ferestre care glisează de-a lungul blocului → <strong>
 ];
 
 // ─── STATE ────────────────────────────────────────────────────────────────────
-let curEp = EPISODES[0];
-let curIdx = -1;
+let curEp   = EPISODES[0];
+let curIdx  = -1;
 let playing = false;
-let rate = 1;
-const SPEEDS = [0.8, 1, 1.25, 1.5, 1.75, 2];
-let spdIdx = 1;
-let voices = [];
-let selVoice = null;
+let rate    = 1;
+const SPEEDS = [0.75, 1, 1.25, 1.5, 1.75, 2];
+let spdIdx  = 1;
+let curAudio = null;
+const audioCache = new Map(); // key: "epId-secIdx" → blob URL
 
-// ─── VOICES ──────────────────────────────────────────────────────────────────
-function loadVoices() {
-  voices = speechSynthesis.getVoices();
+// ─── ELEVENLABS: LOAD VOICES ──────────────────────────────────────────────────
+async function loadVoices() {
   const sel = document.getElementById('voiceSel');
-  sel.innerHTML = '';
-  const ro = voices.filter(v => v.lang.startsWith('ro'));
-  const other = voices.filter(v => !v.lang.startsWith('ro'));
+  try {
+    const resp = await fetch('/api/voices');
+    if (!resp.ok) throw new Error(resp.status);
+    const data = await resp.json();
 
-  if (ro.length) {
-    const g = document.createElement('optgroup');
-    g.label = '🇷🇴 Voci Române';
-    ro.forEach(v => {
-      const o = document.createElement('option');
-      o.value = v.name; o.textContent = `${v.name} (${v.lang})`;
-      g.appendChild(o);
+    sel.innerHTML = '';
+    // Sort: premade first, then custom
+    const sorted = [...data.voices].sort((a, b) => {
+      if (a.category === 'premade' && b.category !== 'premade') return -1;
+      if (a.category !== 'premade' && b.category === 'premade') return 1;
+      return a.name.localeCompare(b.name);
     });
-    sel.appendChild(g);
-    selVoice = ro[0];
-  }
 
-  if (other.length) {
-    const g2 = document.createElement('optgroup');
-    g2.label = 'Alte voci';
-    other.slice(0, 25).forEach(v => {
+    sorted.forEach(v => {
       const o = document.createElement('option');
-      o.value = v.name; o.textContent = `${v.name} (${v.lang})`;
-      g2.appendChild(o);
+      o.value = v.voice_id;
+      const accent = v.labels && v.labels.accent ? ` · ${v.labels.accent}` : '';
+      const lang   = v.labels && v.labels.language ? ` [${v.labels.language}]` : '';
+      o.textContent = `${v.name}${accent}${lang}`;
+      if (v.voice_id === VOICE_ID) o.selected = true;
+      sel.appendChild(o);
     });
-    sel.appendChild(g2);
-  }
 
-  if (!selVoice && voices.length) selVoice = voices[0];
-  refreshVoiceWarning();
+    // If default not found, use first
+    if (!sel.value && sorted.length) {
+      VOICE_ID = sorted[0].voice_id;
+      sel.value = VOICE_ID;
+    }
+  } catch (e) {
+    sel.innerHTML = '<option value="">❌ Eroare API — verifică cheia</option>';
+    console.error('ElevenLabs voices error:', e);
+  }
 }
-speechSynthesis.onvoiceschanged = loadVoices;
 loadVoices();
 
 document.getElementById('voiceSel').addEventListener('change', e => {
-  selVoice = voices.find(v => v.name === e.target.value) || null;
+  VOICE_ID = e.target.value;
+  // Clear cache when voice changes
+  audioCache.forEach(url => URL.revokeObjectURL(url));
+  audioCache.clear();
+  updateCacheDots();
 });
 
-function refreshVoiceWarning() {
-  const w = document.getElementById('vwarn');
-  if (!w) return;
-  const hasRo = voices.some(v => v.lang.startsWith('ro'));
-  w.style.display = hasRo ? 'none' : 'block';
+// ─── ELEVENLABS: SPEAK ───────────────────────────────────────────────────────
+async function speak(text, cacheKey, onEnd) {
+  // Stop current
+  if (curAudio) { curAudio.pause(); curAudio = null; }
+
+  const status = document.getElementById('statusTxt');
+
+  try {
+    let url;
+
+    if (audioCache.has(cacheKey)) {
+      url = audioCache.get(cacheKey);
+    } else {
+      status.innerHTML = '<span class="loading-spin">⏳</span> Generez...';
+      const resp = await fetch('/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text,
+          voice_id: VOICE_ID,
+          model_id: ELEVEN_MODEL,
+          voice_settings: { stability: 0.45, similarity_boost: 0.80, style: 0.2, use_speaker_boost: true }
+        })
+      });
+
+      if (!resp.ok) {
+        const err = await resp.text();
+        throw new Error(`${resp.status}: ${err}`);
+      }
+
+      const blob = await resp.blob();
+      url = URL.createObjectURL(blob);
+      audioCache.set(cacheKey, url);
+      updateCacheDots();
+    }
+
+    curAudio = new Audio(url);
+    curAudio.playbackRate = rate;
+
+    curAudio.onended = () => { curAudio = null; if (onEnd) onEnd(); };
+    curAudio.onerror = (e) => {
+      console.error('Audio playback error:', e);
+      curAudio = null;
+      if (onEnd) onEnd();
+    };
+
+    await curAudio.play();
+
+  } catch (err) {
+    console.error('ElevenLabs error:', err);
+    status.textContent = '❌ Eroare API';
+    playing = false;
+    updateUI();
+  }
+}
+
+// ─── PLAY LOGIC ───────────────────────────────────────────────────────────────
+function play() {
+  if (curIdx < 0) curIdx = 0;
+  playing = true;
+  updateUI();
+  highlightSec(curIdx);
+
+  const sec = curEp.sections[curIdx];
+  const key = `${curEp.id}-${curIdx}`;
+
+  speak(sec.vox, key, () => {
+    if (!playing) return;
+    curIdx++;
+    if (curIdx >= curEp.sections.length) {
+      playing = false; curIdx = -1;
+      document.getElementById('statusTxt').textContent = '✅ Gata!';
+      document.getElementById('progBar').style.width = '100%';
+      updateUI();
+    } else {
+      play();
+    }
+  });
+}
+
+function stop() {
+  if (curAudio) { curAudio.pause(); curAudio = null; }
+  playing = false;
+  updateUI();
+}
+
+// ─── UI HELPERS ───────────────────────────────────────────────────────────────
+function highlightSec(i) {
+  document.querySelectorAll('.sec').forEach((el, j) => {
+    el.classList.toggle('active', j === i);
+    el.classList.toggle('done', j < i);
+  });
+  const el = document.getElementById('sec' + i);
+  if (el) el.scrollIntoView({ behavior:'smooth', block:'center' });
+  const pct = ((i + 1) / curEp.sections.length * 100).toFixed(0);
+  document.getElementById('progBar').style.width = pct + '%';
+  document.getElementById('statusTxt').textContent = `${i + 1} / ${curEp.sections.length}`;
+}
+
+function updateUI() {
+  const btn = document.getElementById('btnPlay');
+  btn.textContent = playing ? '⏸' : '▶';
+}
+
+function updateCacheDots() {
+  curEp.sections.forEach((_, i) => {
+    const el = document.getElementById('dot' + i);
+    if (el) el.style.display = audioCache.has(`${curEp.id}-${i}`) ? 'inline-block' : 'none';
+  });
+}
+
+function selectEp(ep) {
+  stop();
+  curEp = ep; curIdx = -1;
+  renderSidebar();
+  renderMain();
 }
 
 // ─── RENDER ───────────────────────────────────────────────────────────────────
 function renderSidebar() {
   const list = document.getElementById('epList');
   list.innerHTML = EPISODES.map(ep => `
-    <div class="ep-card${ep.id===curEp.id?' active':''}${ep.locked?' locked':''}" data-id="${ep.id}">
+    <div class="ep-card${ep.id === curEp.id ? ' active' : ''}${ep.locked ? ' locked' : ''}" data-id="${ep.id}">
       <div class="ep-emoji">${ep.emoji}</div>
       <div class="ep-info">
         <div class="ep-title">Ep.${ep.id}: ${ep.title}</div>
@@ -459,13 +537,13 @@ function renderSidebar() {
   });
 }
 
-function esc(s) {
+function escHtml(s) {
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
 function hlCode(code) {
   return code.split('\n').map(line => {
-    const e = esc(line);
+    const e = escHtml(line);
     if (e.trimStart().startsWith('//')) return `<span style="color:#6a9955;font-style:italic">${e}</span>`;
     return e
       .replace(/\b(int|String|boolean|void|return|new|public|private|static|for|while|if|else|class|import|Math)\b/g,
@@ -476,8 +554,7 @@ function hlCode(code) {
 
 function renderMain() {
   const ep = curEp;
-  const main = document.getElementById('mainArea');
-  main.innerHTML = `
+  document.getElementById('mainArea').innerHTML = `
     <div class="ep-hdr">
       <div class="ep-hdr-top">
         <div class="ep-big-emoji">${ep.emoji}</div>
@@ -487,16 +564,15 @@ function renderMain() {
           <div class="ep-main-sub">${ep.subtitle}</div>
         </div>
       </div>
-      <div class="ep-tags">${ep.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-    </div>
-    <div class="v-warn" id="vwarn">
-      ⚠️ Nu s-au găsit voci în română pe acest browser.<br>
-      Încearcă <strong>Google Chrome</strong> sau instalează vocea română din setările Windows (Settings → Time &amp; Language → Speech).
+      <div class="ep-tags">${ep.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
     </div>
     <div class="sections" id="sections">
-      ${ep.sections.map((s,i) => `
+      ${ep.sections.map((s, i) => `
         <div class="sec" id="sec${i}" data-i="${i}">
-          <div class="sec-lbl">${s.lbl}</div>
+          <div class="sec-lbl">
+            ${s.lbl}
+            <span class="cached-dot" id="dot${i}" style="display:${audioCache.has(`${ep.id}-${i}`) ? 'inline-block' : 'none'}" title="Audio cached"></span>
+          </div>
           <div class="sec-text">${s.html}</div>
           ${s.code ? `<div class="code-block">${hlCode(s.code)}</div>` : ''}
         </div>`).join('')}
@@ -509,94 +585,37 @@ function renderMain() {
       play();
     });
   });
-  refreshVoiceWarning();
 }
 
-// ─── SPEECH ───────────────────────────────────────────────────────────────────
-function speak(text, onEnd) {
-  speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'ro-RO';
-  u.rate = rate;
-  if (selVoice) u.voice = selVoice;
-  u.onend = () => { if (onEnd) onEnd(); };
-  u.onerror = () => { if (onEnd) onEnd(); };
-  speechSynthesis.speak(u);
-}
-
-function play() {
-  if (curIdx < 0) curIdx = 0;
-  playing = true;
-  updateUI();
-  highlightSec(curIdx);
-  speak(curEp.sections[curIdx].vox, () => {
-    if (!playing) return;
-    curIdx++;
-    if (curIdx >= curEp.sections.length) {
-      playing = false; curIdx = -1;
-      document.getElementById('statusTxt').textContent = '✅ Gata!';
-      document.getElementById('progBar').style.width = '100%';
-      updateUI();
-    } else {
-      play();
-    }
-  });
-}
-
-function stop() {
-  speechSynthesis.cancel();
-  playing = false;
-  updateUI();
-}
-
-function highlightSec(i) {
-  document.querySelectorAll('.sec').forEach((el, j) => {
-    el.classList.toggle('active', j === i);
-    el.classList.toggle('done', j < i);
-  });
-  const el = document.getElementById('sec'+i);
-  if (el) el.scrollIntoView({behavior:'smooth', block:'center'});
-  const pct = ((i+1)/curEp.sections.length*100).toFixed(0);
-  document.getElementById('progBar').style.width = pct+'%';
-  document.getElementById('statusTxt').textContent = `${i+1} / ${curEp.sections.length}`;
-}
-
-function updateUI() {
-  document.getElementById('btnPlay').textContent = playing ? '⏸' : '▶';
-}
-
-function selectEp(ep) {
-  stop();
-  curEp = ep; curIdx = -1;
-  renderSidebar();
-  renderMain();
-}
-
-// ─── CONTROLS ─────────────────────────────────────────────────────────────────
+// ─── CONTROLS ────────────────────────────────────────────────────────────────
 document.getElementById('btnPlay').addEventListener('click', () => {
   if (playing) { stop(); }
   else { if (curIdx < 0) curIdx = 0; play(); }
 });
+
 document.getElementById('btnNext').addEventListener('click', () => {
   stop();
   if (curIdx < curEp.sections.length - 1) { curIdx++; play(); }
 });
+
 document.getElementById('btnPrev').addEventListener('click', () => {
   stop();
   if (curIdx > 0) { curIdx--; play(); }
   else { curIdx = 0; highlightSec(0); }
 });
+
 document.getElementById('spdBtn').addEventListener('click', () => {
   spdIdx = (spdIdx + 1) % SPEEDS.length;
   rate = SPEEDS[spdIdx];
   document.getElementById('spdBtn').textContent = rate + '×';
-  if (playing) { const i = curIdx; stop(); curIdx = i; play(); }
+  if (curAudio) curAudio.playbackRate = rate; // aplică imediat
 });
+
 document.addEventListener('keydown', e => {
   if (e.target.tagName === 'SELECT') return;
-  if (e.code === 'Space') { e.preventDefault(); document.getElementById('btnPlay').click(); }
+  if (e.code === 'Space')      { e.preventDefault(); document.getElementById('btnPlay').click(); }
   if (e.code === 'ArrowRight') document.getElementById('btnNext').click();
-  if (e.code === 'ArrowLeft') document.getElementById('btnPrev').click();
+  if (e.code === 'ArrowLeft')  document.getElementById('btnPrev').click();
 });
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
