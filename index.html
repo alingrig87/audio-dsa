@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSA Povești 🎧 — Google Interview</title>
+<style>
+:root {
+  --bg: #080810;
+  --surface: #10101c;
+  --surface2: #14142a;
+  --card: #1c1c30;
+  --border: rgba(255,255,255,0.07);
+  --accent: #6366f1;
+  --accent-l: #818cf8;
+  --glow: rgba(99,102,241,0.18);
+  --text: #e2e8f0;
+  --muted: #6b7280;
+  --dim: #9ca3af;
+  --yellow: #fbbf24;
+  --green: #10b981;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family:'Segoe UI',system-ui,sans-serif;
+  background:var(--bg); color:var(--text);
+  height:100vh; display:flex; flex-direction:column; overflow:hidden;
+}
+/* HEADER */
+.hdr {
+  background:var(--surface); border-bottom:1px solid var(--border);
+  padding:.6rem 1.5rem; display:flex; align-items:center; gap:.75rem; flex-shrink:0;
+}
+.hdr-logo { font-size:1.4rem; }
+.hdr-title { font-size:1rem; font-weight:600; }
+.hdr-sub { font-size:.7rem; color:var(--muted); }
+.hdr-right { margin-left:auto; display:flex; align-items:center; gap:.75rem; }
+select.voice-sel {
+  background:var(--surface2); border:1px solid var(--border); color:var(--dim);
+  padding:.3rem .6rem; border-radius:6px; font-size:.72rem; cursor:pointer; max-width:220px;
+}
+select.voice-sel:focus { outline:none; border-color:var(--accent); }
+/* LAYOUT */
+.layout { display:flex; flex:1; overflow:hidden; }
+/* SIDEBAR */
+.sidebar {
+  width:250px; background:var(--surface); border-right:1px solid var(--border);
+  overflow-y:auto; flex-shrink:0; padding:.6rem;
+}
+.sidebar-lbl {
+  font-size:.65rem; font-weight:700; color:var(--muted);
+  text-transform:uppercase; letter-spacing:.08em; padding:.4rem .5rem .6rem;
+}
+.ep-card {
+  display:flex; align-items:center; gap:.6rem; padding:.6rem .75rem;
+  border-radius:8px; cursor:pointer; margin-bottom:.2rem;
+  border:1px solid transparent; transition:all .2s;
+}
+.ep-card:hover { background:var(--surface2); border-color:var(--border); }
+.ep-card.active { background:var(--glow); border-color:var(--accent); }
+.ep-card.locked { opacity:.35; cursor:not-allowed; }
+.ep-emoji { font-size:1.3rem; flex-shrink:0; }
+.ep-info { flex:1; min-width:0; }
+.ep-title { font-size:.8rem; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ep-sub { font-size:.68rem; color:var(--muted); }
+.ep-dur { font-size:.62rem; color:var(--muted); margin-top:.1rem; }
+.ep-lock { font-size:.65rem; color:var(--muted); }
+/* MAIN */
+.main { flex:1; overflow-y:auto; display:flex; flex-direction:column; }
+.ep-hdr { padding:1.5rem 2rem 1rem; border-bottom:1px solid var(--border); }
+.ep-hdr-top { display:flex; align-items:center; gap:.75rem; margin-bottom:.5rem; }
+.ep-big-emoji { font-size:2.2rem; }
+.ep-num { font-size:.7rem; color:var(--accent-l); font-weight:600; text-transform:uppercase; letter-spacing:.08em; }
+.ep-main-title { font-size:1.5rem; font-weight:700; }
+.ep-main-sub { font-size:.9rem; color:var(--muted); }
+.ep-tags { display:flex; gap:.5rem; margin-top:.6rem; flex-wrap:wrap; }
+.tag {
+  font-size:.68rem; padding:.15rem .55rem; border-radius:20px;
+  background:var(--surface2); color:var(--dim); border:1px solid var(--border);
+}
+/* VOICE WARNING */
+.v-warn {
+  background:rgba(251,191,36,.1); border:1px solid rgba(251,191,36,.3);
+  color:var(--yellow); padding:.65rem 1rem; border-radius:8px;
+  font-size:.78rem; margin:1rem 2rem 0; display:none; line-height:1.5;
+}
+/* SECTIONS */
+.sections { padding:1.25rem 2rem; display:flex; flex-direction:column; gap:.9rem; }
+.sec {
+  border-radius:10px; padding:1.1rem 1.3rem;
+  border:1px solid var(--border); background:var(--card);
+  transition:all .3s; cursor:pointer;
+}
+.sec:hover { border-color:rgba(99,102,241,.3); }
+.sec.active {
+  border-color:var(--accent); background:var(--surface2);
+  box-shadow:0 0 22px var(--glow);
+}
+.sec.done { opacity:.5; }
+.sec-lbl { font-size:.62rem; font-weight:700; color:var(--accent-l); text-transform:uppercase; letter-spacing:.08em; margin-bottom:.45rem; }
+.sec-text { font-size:.92rem; line-height:1.75; color:var(--text); }
+.sec-text strong { color:var(--yellow); font-weight:600; }
+.sec-text em { color:var(--accent-l); font-style:normal; }
+.sec-text br { display:block; content:""; margin-top:.4rem; }
+.code-block {
+  background:#0a0a14; border:1px solid rgba(255,255,255,.08); border-radius:8px;
+  padding:.9rem 1rem; margin-top:.75rem;
+  font-family:'Consolas','Courier New',monospace; font-size:.8rem; line-height:1.65;
+  overflow-x:auto; color:#abb2bf; white-space:pre;
+}
+/* CONTROLS */
+.ctrl {
+  background:var(--surface); border-top:1px solid var(--border);
+  padding:.7rem 1.5rem; flex-shrink:0;
+}
+.ctrl-inner {
+  max-width:620px; margin:0 auto;
+  display:flex; align-items:center; gap:.85rem;
+}
+.prog-wrap { flex:1; height:4px; background:var(--surface2); border-radius:2px; overflow:hidden; }
+.prog-bar {
+  height:100%; border-radius:2px;
+  background:linear-gradient(to right,var(--accent),var(--accent-l));
+  width:0%; transition:width .3s;
+}
+.btn {
+  border:none; cursor:pointer; display:flex; align-items:center;
+  justify-content:center; border-radius:50%; transition:all .2s;
+}
+.btn-play {
+  width:46px; height:46px; background:var(--accent);
+  color:#fff; font-size:1.1rem; flex-shrink:0;
+}
+.btn-play:hover { background:var(--accent-l); transform:scale(1.05); }
+.btn-skip {
+  width:34px; height:34px; background:var(--surface2);
+  color:var(--dim); font-size:.85rem;
+}
+.btn-skip:hover { background:var(--card); color:var(--text); }
+.spd-btn {
+  font-size:.7rem; font-weight:700; color:var(--muted);
+  background:var(--surface2); border:1px solid var(--border);
+  border-radius:6px; padding:.28rem .5rem; cursor:pointer; min-width:42px; text-align:center;
+}
+.spd-btn:hover { color:var(--text); border-color:var(--accent); }
+.status { font-size:.7rem; color:var(--muted); min-width:60px; text-align:center; }
+/* Scrollbar */
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:3px; }
+@media(max-width:600px) {
+  .sidebar { display:none; }
+  .sections { padding:.9rem; }
+  .ep-hdr { padding:1rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-logo">🎧</div>
+  <div>
+    <div class="hdr-title">DSA Povești</div>
+    <div class="hdr-sub">Pregătire interviu Google • în Română</div>
+  </div>
+  <div class="hdr-right">
+    <select class="voice-sel" id="voiceSel" title="Alege vocea"></select>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="sidebar">
+    <div class="sidebar-lbl">Episoade</div>
+    <div id="epList"></div>
+  </div>
+  <div class="main" id="mainArea"></div>
+</div>
+
+<div class="ctrl">
+  <div class="ctrl-inner">
+    <button class="btn btn-skip" id="btnPrev" title="Secțiunea anterioară (←)">⏮</button>
+    <button class="btn btn-play" id="btnPlay" title="Play / Pause (Spațiu)">▶</button>
+    <button class="btn btn-skip" id="btnNext" title="Secțiunea următoare (→)">⏭</button>
+    <div class="prog-wrap"><div class="prog-bar" id="progBar"></div></div>
+    <button class="spd-btn" id="spdBtn">1×</button>
+    <div class="status" id="statusTxt">Gata</div>
+  </div>
+</div>
+
+<script>
+// ─── DATE EPISOADE ────────────────────────────────────────────────────────────
+const EPISODES = [
+{
+  id:1, emoji:'🏢', title:'Array-uri', subtitle:'Blocul cu Apartamente',
+  dur:'~10 min', tags:['Array','Two Pointers','Sliding Window'], locked:false,
+  sections:[
+    {
+      lbl:'🎙️ Bun venit!',
+      html:`<strong>Bun venit!</strong> Sunt ghidul tău pentru pregătirea interviului de algoritmi de la Google.<br><br>
+În această serie de povești audio, vei descoperi <em>toate structurile de date</em> și algoritmii esențiali — explicați simplu, cu exemple din viața de zi cu zi.<br><br>
+Apasă <strong>Play</strong> și ascultă oricând: când aspiri, când gătești, când mergi la plimbare. Hai să începem cu primul concept fundamental: <em>Array-ul</em>.`,
+      vox:`Bun venit! Sunt ghidul tău pentru pregătirea interviului de algoritmi de la Google. În această serie de povești audio, vei descoperi toate structurile de date și algoritmii esențiali, explicați simplu, cu exemple din viața de zi cu zi. Apasă Play și ascultă oricând: când aspiri, când gătești, când mergi la plimbare. Hai să începem cu primul concept fundamental: Array-ul.`
+    },
+    {
+      lbl:'🏢 Povestea — Blocul cu Apartamente',
+      html:`Imaginează-ți că ești administratorul unui bloc ultramodern — <em>Array Tower</em>.<br><br>
+Blocul are exact zece etaje, dar numerotarea nu începe de la <strong>unu</strong>, ci de la <strong>zero</strong>. Avem etajul 0, etajul 1, etajul 2... până la etajul 9.<br><br>
+Aceasta este <strong>prima regulă de aur</strong> în programare: <em>numărăm întotdeauna de la zero.</em><br><br>
+Fiecare apartament găzduiește exact un singur locatar — un număr, un text, orice valoare. Și cel mai important: <strong>blocul are o dimensiune fixă</strong>. Odată construit, nu poți adăuga sau elimina etaje!`,
+      vox:`Imaginează-ți că ești administratorul unui bloc ultramodern — Array Tower. Blocul are exact zece etaje, dar numerotarea nu începe de la unu, ci de la zero. Avem etajul zero, etajul unu, etajul doi, până la etajul nouă. Aceasta este prima regulă de aur în programare: numărăm întotdeauna de la zero. Fiecare apartament găzduiește exact un singur locatar — un număr, un text, orice valoare. Și cel mai important: blocul are o dimensiune fixă. Odată construit, nu poți adăuga sau elimina etaje!`
+    },
+    {
+      lbl:'☕ Declarare în Java',
+      html:`Cum construim un array în Java? Avem două variante:`,
+      code:
+`// Varianta 1: array gol cu 10 locuri
+int[] bloc = new int[10];
+
+// Varianta 2: array cu valori deja puse
+int[] bloc = {5, 12, 3, 8, 1, 7, 4, 9, 2, 6};
+
+// Câte apartamente are blocul?
+int n = bloc.length;   // → 10   (FĂRĂ paranteze!)`,
+      vox:`Cum construim un array în Java? Avem două variante. Prima: declarăm un array gol cu zece locuri — int, bloc, egal, new int de zece. A doua: array-ul cu valori deja puse între acolade. Pentru a afla câte elemente are, folosim proprietatea point length — FĂRĂ paranteze.`
+    },
+    {
+      lbl:'⚡ Acces Direct — O(1)',
+      html:`Aceasta este <strong>superputerea</strong> array-ului: <em>accesul direct în timp constant</em>.<br><br>
+Vrei să ajungi la apartamentul 7? Nu treci prin 0, 1, 2, 3, 4, 5, 6. <strong>Mergi direct la 7!</strong><br><br>
+Nu contează dacă blocul are 10 sau 10 milioane de apartamente — accesul durează <strong>același timp</strong>.<br><br>
+Aceasta se numește complexitate <strong>O(1)</strong> — timp constant. Este <em>cea mai bună complexitate posibilă.</em>`,
+      code:
+`// Citim locatarul de la etajul 7:
+int locatar = bloc[7];   // acces instant!
+
+// Schimbăm locatarul:
+bloc[3] = 99;            // punem 99 la etajul 3`,
+      vox:`Aceasta este superputerea array-ului: accesul direct în timp constant. Vrei să ajungi la apartamentul șapte? Nu treci prin zero, unu, doi, trei, patru, cinci, șase. Mergi direct la șapte! Nu contează dacă blocul are zece sau zece milioane de apartamente — accesul durează același timp. Aceasta se numește complexitate O de unu — timp constant. Este cea mai bună complexitate posibilă.`
+    },
+    {
+      lbl:'🔍 Căutare — O(n)',
+      html:`Ce se întâmplă dacă nu știi la ce etaj stă Ion? Știi doar că e <em>undeva</em> în bloc.<br><br>
+Trebuie să bați la <strong>fiecare ușă</strong>, de la etajul 0 la etajul 9. În cel mai rău caz, Ion stă la ultimul etaj — sau nu e deloc în bloc.<br><br>
+Aceasta este <em>căutarea liniară</em> — complexitate <strong>O(n)</strong>. Cu cât blocul e mai mare, cu atât durează mai mult.`,
+      code:
+`public int cauta(int[] arr, int valoare) {
+    for (int i = 0; i < arr.length; i++) {
+        if (arr[i] == valoare) {
+            return i;    // găsit! returnăm indexul
+        }
+    }
+    return -1;           // nu am găsit
+}`,
+      vox:`Ce se întâmplă dacă nu știi la ce etaj stă Ion? Știi doar că e undeva în bloc. Trebuie să bați la fiecare ușă, de la etajul zero la etajul nouă. În cel mai rău caz, Ion stă la ultimul etaj sau nu e deloc în bloc. Aceasta este căutarea liniară — complexitate O de n. Cu cât blocul e mai mare, cu atât durează mai mult.`
+    },
+    {
+      lbl:'⚠️ Inserare și Ștergere — O(n)',
+      html:`Acum vine <strong>dezavantajul principal</strong> al array-ului.<br><br>
+Vrei să muți un nou locatar la etajul 3? <em>Toți cei de la etajul 3 în sus trebuie să se mute cu un etaj mai sus!</em> Etajul 3 → 4, etajul 4 → 5... și tot așa.<br><br>
+Dacă blocul are o mie de apartamente și inserezi la poziția 0, <strong>toate cele o mie de familii</strong> se mută. Inserarea în array are complexitate <strong>O(n)</strong>.<br><br>
+<strong>Sfat interviu:</strong> Dacă ai nevoie de inserări frecvente, folosește <em>ArrayList</em> sau <em>LinkedList</em>, nu array simplu!`,
+      vox:`Acum vine dezavantajul principal al array-ului. Vrei să muți un nou locatar la etajul trei? Toți cei de la etajul trei în sus trebuie să se mute cu un etaj mai sus! Etajul trei devine patru, patru devine cinci, și tot așa. Dacă blocul are o mie de apartamente și inserezi la poziția zero, toate cele o mie de familii se mută. Inserarea în array are complexitate O de n. Sfat de interviu: Dacă ai nevoie de inserări frecvente, folosește ArrayList sau LinkedList, nu array simplu!`
+    },
+    {
+      lbl:'🛠️ Metode Esențiale Java',
+      html:`Iată <strong>armele tale secrete</strong> din clasa <em>Arrays</em> — importă-o cu <em>import java.util.Arrays</em>:`,
+      code:
+`import java.util.Arrays;
+
+int[] arr = {5, 2, 8, 1, 9, 3};
+
+Arrays.sort(arr);
+// arr → {1, 2, 3, 5, 8, 9}   complexitate O(n log n)
+
+Arrays.fill(arr, 0);
+// arr → {0, 0, 0, 0, 0, 0}
+
+int[] copie = Arrays.copyOf(arr, 10);
+// primele 6 copiate, restul 0
+
+int[] sub = Arrays.copyOfRange(arr, 1, 4);
+// elementele de la index 1 pana la 3 (4 exclusiv)
+
+System.out.println(Arrays.toString(arr));
+// Output: [0, 0, 0, 0, 0, 0]
+
+int len = arr.length;   // ← FĂRĂ paranteze!`,
+      vox:`Iată armele tale secrete din clasa Arrays. Trebuie să o imporți cu import java.util.Arrays. Arrays punct sort de arr — sortează în ordine crescătoare, cu complexitate O de n log n. Arrays punct fill de arr virgulă zero — umple toate pozițiile cu zero. Arrays punct copyOf de arr virgulă zece — face o copie cu zece locuri. Arrays punct copyOfRange de arr virgulă unu virgulă patru — copiază elementele de la indexul unu până la trei, patru exclusiv. Arrays punct toString de arr — transformă array-ul într-un String frumos pentru afișare. Și arr punct length, FĂRĂ paranteze, îți spune numărul de elemente.`
+    },
+    {
+      lbl:'🎯 Pattern: Two Pointers',
+      html:`<strong>Two Pointers</strong> este unul dintre cele mai folosite pattern-uri la Google.<br><br>
+<em>Problema:</em> Într-un array <strong>sortat</strong>, găsește două numere care adunate dau o țintă.<br><br>
+<em>Metoda naivă:</em> Verifici fiecare pereche posibilă → <strong>O(n²)</strong>. Prea lent!<br><br>
+<em>Metoda Two Pointers:</em><br>
+• Pui un deget <em>(left)</em> la primul element<br>
+• Pui alt deget <em>(right)</em> la ultimul element<br>
+• Suma prea mare → muți <em>right</em> spre stânga<br>
+• Suma prea mică → muți <em>left</em> spre dreapta<br>
+• Continui până găsești sau pointerii se întâlnesc<br><br>
+Rezultat: <strong>O(n)</strong> — de n ori mai rapid!`,
+      code:
+`public int[] twoSum(int[] arr, int target) {
+    int left = 0;
+    int right = arr.length - 1;
+
+    while (left < right) {
+        int sum = arr[left] + arr[right];
+
+        if (sum == target)  return new int[]{left, right};
+        else if (sum < target) left++;   // avem nevoie de mai mult
+        else                   right--;  // avem nevoie de mai puțin
+    }
+    return new int[]{};  // nu există
+}`,
+      vox:`Two Pointers este unul dintre cele mai folosite pattern-uri la Google. Problema: Într-un array sortat, găsește două numere care adunate dau o țintă. Metoda naivă: Verifici fiecare pereche posibilă — O de n pătrat. Prea lent! Metoda Two Pointers: Pui un deget, pe care îl numim left, la primul element. Pui alt deget, pe care îl numim right, la ultimul element. Dacă suma e prea mare, muți right spre stânga. Dacă suma e prea mică, muți left spre dreapta. Continui până găsești sau pointerii se întâlnesc. Rezultatul este O de n — de n ori mai rapid! Aceasta este magia algoritmilor.`
+    },
+    {
+      lbl:'🪟 Pattern: Sliding Window',
+      html:`<strong>Sliding Window</strong> — Fereastra Glisantă — este perfect pentru <em>subarray-uri consecutive</em>.<br><br>
+<em>Problema:</em> Găsește suma maximă a k elemente consecutive.<br><br>
+<em>Metoda naivă:</em> Calculezi suma pentru fiecare fereastră de la capăt → <strong>O(n·k)</strong>.<br><br>
+<em>Sliding Window:</em> Calculezi prima fereastră, apoi pentru fiecare pas: <strong>scazi primul element și adaugi cel nou</strong>. Nu recalculezi totul!<br><br>
+Este ca o cameră cu k ferestre care glisează de-a lungul blocului → <strong>O(n)</strong>!`,
+      code:
+`public int sumaMaxima(int[] arr, int k) {
+    // Calculăm prima fereastră
+    int suma = 0;
+    for (int i = 0; i < k; i++) suma += arr[i];
+
+    int max = suma;
+
+    // Glisăm fereastra spre dreapta
+    for (int i = k; i < arr.length; i++) {
+        suma += arr[i];      // adăugăm noul element din dreapta
+        suma -= arr[i - k];  // scoatem elementul ieșit din stânga
+        max = Math.max(max, suma);
+    }
+    return max;   // O(n) !!
+}`,
+      vox:`Sliding Window, sau Fereastra Glisantă, este perfect pentru subarray-uri consecutive. Problema: Găsește suma maximă a k elemente consecutive. Metoda naivă: Calculezi suma pentru fiecare fereastră de la capăt — O de n ori k. Sliding Window: Calculezi prima fereastră, apoi pentru fiecare pas scazi primul element și adaugi cel nou. Nu recalculezi totul! Este ca o cameră cu k ferestre care glisează de-a lungul blocului. Rezultatul este O de n — mult mai eficient!`
+    },
+    {
+      lbl:'🧠 Ghid de Decizie la Interviu',
+      html:`Când primești o problemă cu <strong>array-uri</strong> la Google, pune-ți aceste întrebări:<br><br>
+<strong>1. Este array-ul sortat?</strong><br>
+→ Gândește-te la <em>Binary Search</em> sau <em>Two Pointers</em><br><br>
+<strong>2. Ai nevoie de subarray-uri consecutive?</strong><br>
+→ Gândește-te la <em>Sliding Window</em><br><br>
+<strong>3. Ai nevoie să memorezi valori sau frecvențe?</strong><br>
+→ Gândește-te la <em>HashMap sau HashSet</em><br><br>
+<strong>4. Ai nevoie de cel mai mare / cel mai mic element repetat?</strong><br>
+→ Gândește-te la <em>Heap (PriorityQueue)</em><br><br>
+<strong>Complexități de memorat:</strong> Acces O(1) • Căutare O(n) • Inserare O(n) • Sortare O(n log n)`,
+      vox:`Când primești o problemă cu array-uri la Google, pune-ți aceste întrebări. Unu: Este array-ul sortat? Dacă da, gândește-te la Binary Search sau Two Pointers. Doi: Ai nevoie de subarray-uri consecutive? Gândește-te la Sliding Window. Trei: Ai nevoie să memorezi valori sau frecvențe? Gândește-te la HashMap sau HashSet. Patru: Ai nevoie de cel mai mare sau cel mai mic element repetat? Gândește-te la Heap sau PriorityQueue. Complexitățile de memorat: Acces O de unu. Căutare O de n. Inserare O de n. Sortare O de n log n.`
+    },
+    {
+      lbl:'🎉 Rezumat — Episodul 1',
+      html:`Felicitări! Ai terminat primul episod despre <strong>Array-uri</strong>!<br><br>
+✅ Array = bloc de apartamente cu indici de la <strong>0</strong><br>
+✅ Acces în <strong>O(1)</strong> — superputerea array-ului<br>
+✅ Căutare în <strong>O(n)</strong> — bați la fiecare ușă<br>
+✅ Inserare/ștergere în <strong>O(n)</strong> — dezavantajul principal<br>
+✅ Metode: <em>Arrays.sort, Arrays.fill, Arrays.copyOf, Arrays.toString</em><br>
+✅ Pattern: <em>Two Pointers</em> → O(n²) devine O(n)<br>
+✅ Pattern: <em>Sliding Window</em> → eficient pentru subarray-uri<br><br>
+<strong>Urmează Episodul 2: LinkedList — "Lanțul de Apartamente" 🔗</strong>`,
+      vox:`Felicitări! Ai terminat primul episod despre Array-uri! Iată ce ai învățat astăzi. Array-ul este ca un bloc de apartamente cu indici de la zero. Accesul este O de unu — superputerea array-ului. Căutarea este O de n — bați la fiecare ușă. Inserarea și ștergerea sunt O de n — dezavantajul principal. Metodele importante sunt Arrays.sort, Arrays.fill, Arrays.copyOf și Arrays.toString. Patternul Two Pointers reduce O de n pătrat la O de n. Patternul Sliding Window este eficient pentru subarray-uri consecutive. Data viitoare vom vorbi despre LinkedList — Lanțul de Apartamente. Mult succes!`
+    }
+  ]
+},
+{ id:2, emoji:'🔗', title:'LinkedList', subtitle:'Lanțul de Apartamente', dur:'~12 min', tags:['LinkedList','Fast/Slow Pointers','Reverse'], locked:true, sections:[] },
+{ id:3, emoji:'📚', title:'Stack & Queue', subtitle:'Stiva și Coada', dur:'~9 min', tags:['Stack','Queue','Monotonic Stack'], locked:true, sections:[] },
+{ id:4, emoji:'🗺️', title:'HashMap & HashSet', subtitle:'Dicționarul Magic', dur:'~10 min', tags:['HashMap','HashSet','Frequency Map'], locked:true, sections:[] },
+{ id:5, emoji:'🌳', title:'Binary Tree', subtitle:'Arborele Familiei', dur:'~15 min', tags:['Tree','DFS','BFS','BST'], locked:true, sections:[] },
+{ id:6, emoji:'🔎', title:'Binary Search', subtitle:'Ghicește Numărul', dur:'~8 min', tags:['Binary Search','Template'], locked:true, sections:[] },
+{ id:7, emoji:'📊', title:'Heap / PriorityQueue', subtitle:'Coada cu Priorități', dur:'~10 min', tags:['Heap','PriorityQueue','Top K'], locked:true, sections:[] },
+{ id:8, emoji:'🌐', title:'Graphs', subtitle:'Harta Orașului', dur:'~15 min', tags:['Graph','DFS','BFS','Union-Find'], locked:true, sections:[] },
+{ id:9, emoji:'💎', title:'Dynamic Programming', subtitle:'Amintirile Calculatorului', dur:'~20 min', tags:['DP','Memoization','Tabulation'], locked:true, sections:[] }
+];
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let curEp = EPISODES[0];
+let curIdx = -1;
+let playing = false;
+let rate = 1;
+const SPEEDS = [0.8, 1, 1.25, 1.5, 1.75, 2];
+let spdIdx = 1;
+let voices = [];
+let selVoice = null;
+
+// ─── VOICES ──────────────────────────────────────────────────────────────────
+function loadVoices() {
+  voices = speechSynthesis.getVoices();
+  const sel = document.getElementById('voiceSel');
+  sel.innerHTML = '';
+  const ro = voices.filter(v => v.lang.startsWith('ro'));
+  const other = voices.filter(v => !v.lang.startsWith('ro'));
+
+  if (ro.length) {
+    const g = document.createElement('optgroup');
+    g.label = '🇷🇴 Voci Române';
+    ro.forEach(v => {
+      const o = document.createElement('option');
+      o.value = v.name; o.textContent = `${v.name} (${v.lang})`;
+      g.appendChild(o);
+    });
+    sel.appendChild(g);
+    selVoice = ro[0];
+  }
+
+  if (other.length) {
+    const g2 = document.createElement('optgroup');
+    g2.label = 'Alte voci';
+    other.slice(0, 25).forEach(v => {
+      const o = document.createElement('option');
+      o.value = v.name; o.textContent = `${v.name} (${v.lang})`;
+      g2.appendChild(o);
+    });
+    sel.appendChild(g2);
+  }
+
+  if (!selVoice && voices.length) selVoice = voices[0];
+  refreshVoiceWarning();
+}
+speechSynthesis.onvoiceschanged = loadVoices;
+loadVoices();
+
+document.getElementById('voiceSel').addEventListener('change', e => {
+  selVoice = voices.find(v => v.name === e.target.value) || null;
+});
+
+function refreshVoiceWarning() {
+  const w = document.getElementById('vwarn');
+  if (!w) return;
+  const hasRo = voices.some(v => v.lang.startsWith('ro'));
+  w.style.display = hasRo ? 'none' : 'block';
+}
+
+// ─── RENDER ───────────────────────────────────────────────────────────────────
+function renderSidebar() {
+  const list = document.getElementById('epList');
+  list.innerHTML = EPISODES.map(ep => `
+    <div class="ep-card${ep.id===curEp.id?' active':''}${ep.locked?' locked':''}" data-id="${ep.id}">
+      <div class="ep-emoji">${ep.emoji}</div>
+      <div class="ep-info">
+        <div class="ep-title">Ep.${ep.id}: ${ep.title}</div>
+        <div class="ep-sub">${ep.subtitle}</div>
+        <div class="ep-dur">${ep.dur}</div>
+      </div>
+      ${ep.locked ? '<span class="ep-lock">🔒</span>' : ''}
+    </div>`).join('');
+
+  document.querySelectorAll('.ep-card:not(.locked)').forEach(card => {
+    card.addEventListener('click', () => {
+      const ep = EPISODES.find(e => e.id == card.dataset.id);
+      if (ep) selectEp(ep);
+    });
+  });
+}
+
+function esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function hlCode(code) {
+  return code.split('\n').map(line => {
+    const e = esc(line);
+    if (e.trimStart().startsWith('//')) return `<span style="color:#6a9955;font-style:italic">${e}</span>`;
+    return e
+      .replace(/\b(int|String|boolean|void|return|new|public|private|static|for|while|if|else|class|import|Math)\b/g,
+        '<span style="color:#569cd6">$1</span>')
+      .replace(/\b(\d+)\b/g, '<span style="color:#b5cea8">$1</span>');
+  }).join('\n');
+}
+
+function renderMain() {
+  const ep = curEp;
+  const main = document.getElementById('mainArea');
+  main.innerHTML = `
+    <div class="ep-hdr">
+      <div class="ep-hdr-top">
+        <div class="ep-big-emoji">${ep.emoji}</div>
+        <div>
+          <div class="ep-num">Episodul ${ep.id} &nbsp;•&nbsp; ${ep.dur}</div>
+          <div class="ep-main-title">${ep.title}</div>
+          <div class="ep-main-sub">${ep.subtitle}</div>
+        </div>
+      </div>
+      <div class="ep-tags">${ep.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+    </div>
+    <div class="v-warn" id="vwarn">
+      ⚠️ Nu s-au găsit voci în română pe acest browser.<br>
+      Încearcă <strong>Google Chrome</strong> sau instalează vocea română din setările Windows (Settings → Time &amp; Language → Speech).
+    </div>
+    <div class="sections" id="sections">
+      ${ep.sections.map((s,i) => `
+        <div class="sec" id="sec${i}" data-i="${i}">
+          <div class="sec-lbl">${s.lbl}</div>
+          <div class="sec-text">${s.html}</div>
+          ${s.code ? `<div class="code-block">${hlCode(s.code)}</div>` : ''}
+        </div>`).join('')}
+    </div>`;
+
+  document.querySelectorAll('.sec').forEach(el => {
+    el.addEventListener('click', () => {
+      stop();
+      curIdx = parseInt(el.dataset.i);
+      play();
+    });
+  });
+  refreshVoiceWarning();
+}
+
+// ─── SPEECH ───────────────────────────────────────────────────────────────────
+function speak(text, onEnd) {
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'ro-RO';
+  u.rate = rate;
+  if (selVoice) u.voice = selVoice;
+  u.onend = () => { if (onEnd) onEnd(); };
+  u.onerror = () => { if (onEnd) onEnd(); };
+  speechSynthesis.speak(u);
+}
+
+function play() {
+  if (curIdx < 0) curIdx = 0;
+  playing = true;
+  updateUI();
+  highlightSec(curIdx);
+  speak(curEp.sections[curIdx].vox, () => {
+    if (!playing) return;
+    curIdx++;
+    if (curIdx >= curEp.sections.length) {
+      playing = false; curIdx = -1;
+      document.getElementById('statusTxt').textContent = '✅ Gata!';
+      document.getElementById('progBar').style.width = '100%';
+      updateUI();
+    } else {
+      play();
+    }
+  });
+}
+
+function stop() {
+  speechSynthesis.cancel();
+  playing = false;
+  updateUI();
+}
+
+function highlightSec(i) {
+  document.querySelectorAll('.sec').forEach((el, j) => {
+    el.classList.toggle('active', j === i);
+    el.classList.toggle('done', j < i);
+  });
+  const el = document.getElementById('sec'+i);
+  if (el) el.scrollIntoView({behavior:'smooth', block:'center'});
+  const pct = ((i+1)/curEp.sections.length*100).toFixed(0);
+  document.getElementById('progBar').style.width = pct+'%';
+  document.getElementById('statusTxt').textContent = `${i+1} / ${curEp.sections.length}`;
+}
+
+function updateUI() {
+  document.getElementById('btnPlay').textContent = playing ? '⏸' : '▶';
+}
+
+function selectEp(ep) {
+  stop();
+  curEp = ep; curIdx = -1;
+  renderSidebar();
+  renderMain();
+}
+
+// ─── CONTROLS ─────────────────────────────────────────────────────────────────
+document.getElementById('btnPlay').addEventListener('click', () => {
+  if (playing) { stop(); }
+  else { if (curIdx < 0) curIdx = 0; play(); }
+});
+document.getElementById('btnNext').addEventListener('click', () => {
+  stop();
+  if (curIdx < curEp.sections.length - 1) { curIdx++; play(); }
+});
+document.getElementById('btnPrev').addEventListener('click', () => {
+  stop();
+  if (curIdx > 0) { curIdx--; play(); }
+  else { curIdx = 0; highlightSec(0); }
+});
+document.getElementById('spdBtn').addEventListener('click', () => {
+  spdIdx = (spdIdx + 1) % SPEEDS.length;
+  rate = SPEEDS[spdIdx];
+  document.getElementById('spdBtn').textContent = rate + '×';
+  if (playing) { const i = curIdx; stop(); curIdx = i; play(); }
+});
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'SELECT') return;
+  if (e.code === 'Space') { e.preventDefault(); document.getElementById('btnPlay').click(); }
+  if (e.code === 'ArrowRight') document.getElementById('btnNext').click();
+  if (e.code === 'ArrowLeft') document.getElementById('btnPrev').click();
+});
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+renderSidebar();
+renderMain();
+</script>
+</body>
+</html>
