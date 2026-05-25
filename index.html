@@ -159,11 +159,10 @@ const EPISODES = [
   dur:'~10 min', tags:['Array','Two Pointers','Sliding Window'], locked:false,
   sections:[
     {
-      lbl:'🎙️ Bun venit!',
-      html:`<strong>Bun venit!</strong> Sunt ghidul tău pentru pregătirea interviului de algoritmi de la Google.<br><br>
-În această serie de povești audio, vei descoperi <em>toate structurile de date</em> și algoritmii esențiali — explicați simplu, cu exemple din viața de zi cu zi.<br><br>
-Apasă <strong>Play</strong> și ascultă oricând: când aspiri, când gătești, când mergi la plimbare. Hai să începem cu primul concept fundamental: <em>Array-ul</em>.`,
-      vox:`Bun venit! Sunt ghidul tău pentru pregătirea interviului de algoritmi de la Google. În această serie de povești audio, vei descoperi toate structurile de date și algoritmii esențiali, explicați simplu, cu exemple din viața de zi cu zi. Apasă Play și ascultă oricând: când aspiri, când gătești, când mergi la plimbare. Hai să începem cu primul concept fundamental: Array-ul.`
+      lbl:'📖 Ce este un Array?',
+      html:`Un <strong>Array</strong> (tablou) este o <em>colecție ordonată de elemente de același tip</em>, stocate în locații de memorie <strong>contigue</strong>.<br><br>
+Fiecare element ocupă o poziție fixă numită <em>index</em>. Dimensiunea unui array este stabilită la creare și nu poate fi modificată ulterior.`,
+      vox:`Un Array, sau tablou, este o colecție ordonată de elemente de același tip, stocate în locații de memorie contigue. Fiecare element ocupă o poziție fixă numită index. Dimensiunea unui array este stabilită la creare și nu poate fi modificată ulterior.`
     },
     {
       lbl:'🏢 Povestea — Blocul cu Apartamente',
@@ -222,8 +221,8 @@ Aceasta este <em>căutarea liniară</em> — complexitate <strong>O(n)</strong>.
       html:`Acum vine <strong>dezavantajul principal</strong> al array-ului.<br><br>
 Vrei să muți un nou locatar la etajul 3? <em>Toți cei de la etajul 3 în sus trebuie să se mute cu un etaj mai sus!</em> Etajul 3 → 4, etajul 4 → 5... și tot așa.<br><br>
 Dacă blocul are o mie de apartamente și inserezi la poziția 0, <strong>toate cele o mie de familii se mută</strong>. Inserarea în array are complexitate <strong>O(n)</strong>.<br><br>
-<strong>Sfat interviu:</strong> Dacă ai nevoie de inserări frecvente, folosește <em>ArrayList</em> sau <em>LinkedList</em>, nu array simplu!`,
-      vox:`Acum vine dezavantajul principal al array-ului. Vrei să muți un nou locatar la etajul trei? Toți cei de la etajul trei în sus trebuie să se mute cu un etaj mai sus! Etajul trei merge la patru, patru merge la cinci, și tot așa. Dacă blocul are o mie de apartamente și inserezi la poziția zero, toate cele o mie de familii se mută. Inserarea în array are complexitate O de n. Sfat de interviu: Dacă ai nevoie de inserări frecvente, folosește ArrayList sau LinkedList, nu array simplu!`
+Când ai nevoie de inserări frecvente, <em>ArrayList</em> sau <em>LinkedList</em> sunt alegeri mai potrivite.`,
+      vox:`Acum vine dezavantajul principal al array-ului. Vrei să muți un nou locatar la etajul trei? Toți cei de la etajul trei în sus trebuie să se mute cu un etaj mai sus! Etajul trei merge la patru, patru merge la cinci, și tot așa. Dacă blocul are o mie de apartamente și inserezi la poziția zero, toate cele o mie de familii se mută. Inserarea în array are complexitate O de n. Când ai nevoie de inserări frecvente, ArrayList sau LinkedList sunt alegeri mai potrivite.`
     },
     {
       lbl:'🛠️ Metode Esențiale Java',
@@ -253,7 +252,7 @@ int n = arr.length;   // ← FĂRĂ paranteze!`,
     },
     {
       lbl:'🎯 Pattern: Two Pointers',
-      html:`<strong>Two Pointers</strong> este unul dintre cele mai folosite pattern-uri la Google.<br><br>
+      html:`<strong>Two Pointers</strong> este un pattern eficient pentru array-uri <strong>sortate</strong>.<br><br>
 <em>Problemă:</em> Într-un array <strong>sortat</strong>, găsește două numere care adunate dau o țintă.<br><br>
 <em>Metoda naivă:</em> Verifici fiecare pereche posibilă → <strong>O(n²)</strong>. Prea lent!<br><br>
 <em>Metoda Two Pointers:</em><br>
@@ -277,7 +276,7 @@ Rezultat: <strong>O(n)</strong> — de n ori mai rapid!`,
     }
     return new int[]{};   // nu există
 }`,
-      vox:`Two Pointers este unul dintre cele mai folosite pattern-uri la Google. Problema: Într-un array sortat, găsește două numere care adunate dau o țintă. Metoda naivă: verifici fiecare pereche posibilă — O de n pătrat. Prea lent! Metoda Two Pointers: pui un deget, pe care îl numim left, la primul element. Pui alt deget, pe care îl numim right, la ultimul element. Dacă suma e prea mare, muți right spre stânga. Dacă suma e prea mică, muți left spre dreapta. Continui până găsești sau pointerii se întâlnesc. Rezultatul este O de n — de n ori mai rapid! Aceasta este magia algoritmilor.`
+      vox:`Two Pointers este un pattern eficient pentru array-uri sortate. Problema: Într-un array sortat, găsește două numere care adunate dau o țintă. Metoda naivă: verifici fiecare pereche posibilă — O de n pătrat. Prea lent! Metoda Two Pointers: pui un deget, pe care îl numim left, la primul element. Pui alt deget, pe care îl numim right, la ultimul element. Dacă suma e prea mare, muți right spre stânga. Dacă suma e prea mică, muți left spre dreapta. Continui până găsești sau pointerii se întâlnesc. Rezultatul este O de n — de n ori mai rapid! Aceasta este magia algoritmilor.`
     },
     {
       lbl:'🪟 Pattern: Sliding Window',
@@ -303,31 +302,31 @@ Este ca o cameră cu k ferestre care glisează de-a lungul blocului → <strong>
       vox:`Sliding Window, sau Fereastra Glisantă, este perfect pentru subarray-uri consecutive. Problema: Găsește suma maximă a k elemente consecutive. Metoda naivă: calculezi suma pentru fiecare fereastră de la zero — O de n ori k. Sliding Window: calculezi prima fereastră, apoi pentru fiecare pas scazi primul element și adaugi cel nou. Nu recalculezi totul! Este ca o cameră cu k ferestre care glisează de-a lungul blocului. Rezultatul este O de n — mult mai eficient!`
     },
     {
-      lbl:'🧠 Ghid de Decizie la Interviu',
-      html:`Când primești o problemă cu <strong>array-uri</strong> la Google, întreabă-te:<br><br>
-<strong>1. Este array-ul sortat?</strong><br>
-→ Gândește-te la <em>Binary Search</em> sau <em>Two Pointers</em><br><br>
-<strong>2. Ai nevoie de subarray-uri consecutive?</strong><br>
-→ Gândește-te la <em>Sliding Window</em><br><br>
-<strong>3. Ai nevoie să memorezi valori sau frecvențe?</strong><br>
-→ Gândește-te la <em>HashMap sau HashSet</em><br><br>
-<strong>4. Ai nevoie de cel mai mare / mic element repetat?</strong><br>
-→ Gândește-te la <em>Heap (PriorityQueue)</em><br><br>
-<strong>Complexități de reținut:</strong> Acces O(1) &nbsp;•&nbsp; Căutare O(n) &nbsp;•&nbsp; Inserare O(n) &nbsp;•&nbsp; Sortare O(n log n)`,
-      vox:`Când primești o problemă cu array-uri la Google, întreabă-te aceste lucruri. Unu: Este array-ul sortat? Dacă da, gândește-te la Binary Search sau Two Pointers. Doi: Ai nevoie de subarray-uri consecutive? Gândește-te la Sliding Window. Trei: Ai nevoie să memorezi valori sau frecvențe? Gândește-te la HashMap sau HashSet. Patru: Ai nevoie de cel mai mare sau cel mai mic element repetat? Gândește-te la Heap sau PriorityQueue. Complexitățile de reținut: Acces O de unu. Căutare O de n. Inserare O de n. Sortare O de n log n.`
+      lbl:'🧠 Când să folosești ce?',
+      html:`Alegerea structurii potrivite depinde de proprietățile array-ului și de operația necesară:<br><br>
+<strong>Array sortat + căutare element</strong><br>
+→ <em>Binary Search</em> sau <em>Two Pointers</em><br><br>
+<strong>Subarray-uri sau subșiruri consecutive</strong><br>
+→ <em>Sliding Window</em><br><br>
+<strong>Frecvența sau existența valorilor</strong><br>
+→ <em>HashMap sau HashSet</em><br><br>
+<strong>Cel mai mare / mic element dinamic</strong><br>
+→ <em>Heap (PriorityQueue)</em><br><br>
+<strong>Complexități:</strong> Acces O(1) &nbsp;•&nbsp; Căutare O(n) &nbsp;•&nbsp; Inserare O(n) &nbsp;•&nbsp; Sortare O(n log n)`,
+      vox:`Alegerea structurii potrivite depinde de proprietățile array-ului și de operația necesară. Dacă array-ul este sortat și ai nevoie să cauți un element, folosești Binary Search sau Two Pointers. Dacă ai nevoie să lucrezi cu subarray-uri sau subșiruri consecutive, folosești Sliding Window. Dacă ai nevoie să memorezi frecvența sau existența valorilor, folosești HashMap sau HashSet. Dacă ai nevoie de cel mai mare sau cel mai mic element în mod dinamic, folosești Heap sau PriorityQueue. Complexitățile de bază: Acces O de unu. Căutare O de n. Inserare O de n. Sortare O de n log n.`
     },
     {
-      lbl:'🎉 Rezumat — Episodul 1',
-      html:`Felicitări! Ai terminat primul episod despre <strong>Array-uri</strong>!<br><br>
-✅ Array = bloc de apartamente cu indici de la <strong>0</strong><br>
-✅ Acces în <strong>O(1)</strong> — superputerea array-ului<br>
-✅ Căutare în <strong>O(n)</strong> — bați la fiecare ușă<br>
-✅ Inserare/Ștergere în <strong>O(n)</strong> — dezavantajul principal<br>
-✅ Metode: <em>Arrays.sort, Arrays.fill, Arrays.copyOf, Arrays.toString</em><br>
-✅ Pattern: <em>Two Pointers</em> → O(n²) devine O(n)<br>
-✅ Pattern: <em>Sliding Window</em> → eficient pentru subarray-uri<br><br>
-<strong>Urmează Episodul 2: LinkedList — "Lanțul de Apartamente" 🔗</strong>`,
-      vox:`Felicitări! Ai terminat primul episod despre Array-uri! Iată ce ai învățat astăzi. Array-ul este ca un bloc de apartamente cu indici de la zero. Accesul este O de unu — superputerea array-ului. Căutarea este O de n — bați la fiecare ușă. Inserarea și ștergerea sunt O de n — dezavantajul principal. Metodele importante sunt Arrays punct sort, Arrays punct fill, Arrays punct copyOf și Arrays punct toString. Patternul Two Pointers reduce O de n pătrat la O de n. Patternul Sliding Window este eficient pentru subarray-uri consecutive. Data viitoare vom vorbi despre LinkedList — Lanțul de Apartamente. Mult succes!`
+      lbl:'📋 Rezumat',
+      html:`<strong>Array</strong> — colecție ordonată, dimensiune fixă, indici de la <strong>0</strong><br><br>
+• Acces direct: <strong>O(1)</strong><br>
+• Căutare liniară: <strong>O(n)</strong><br>
+• Inserare / Ștergere: <strong>O(n)</strong> — elementele se deplasează<br>
+• Sortare: <strong>O(n log n)</strong> cu <em>Arrays.sort()</em><br><br>
+<strong>Metode:</strong> <em>Arrays.sort &nbsp;•&nbsp; Arrays.fill &nbsp;•&nbsp; Arrays.copyOf &nbsp;•&nbsp; Arrays.copyOfRange &nbsp;•&nbsp; Arrays.toString</em><br><br>
+<strong>Patternuri:</strong><br>
+• <em>Two Pointers</em> — array sortat, O(n²) → O(n)<br>
+• <em>Sliding Window</em> — subarray-uri consecutive, O(n·k) → O(n)`,
+      vox:`Rezumat Array. Array este o colecție ordonată cu dimensiune fixă și indici de la zero. Acces direct în O de unu. Căutare liniară în O de n. Inserare și ștergere în O de n, deoarece elementele trebuie deplasate. Sortare în O de n log n cu Arrays punct sort. Metodele principale sunt Arrays punct sort, Arrays punct fill, Arrays punct copyOf, Arrays punct copyOfRange și Arrays punct toString. Patternul Two Pointers transformă O de n pătrat în O de n pe array-uri sortate. Patternul Sliding Window transformă O de n ori k în O de n pentru subarray-uri consecutive.`
     }
   ]
 },
