@@ -25,7 +25,8 @@
 body {
   font-family:'Segoe UI',system-ui,sans-serif;
   background:var(--bg); color:var(--text);
-  height:100vh; display:flex; flex-direction:column; overflow:hidden;
+  height:100vh; height:100dvh;
+  display:flex; flex-direction:column; overflow:hidden;
 }
 .hdr {
   background:var(--surface); border-bottom:1px solid var(--border);
@@ -108,7 +109,19 @@ select.voice-sel:focus { outline:none; border-color:var(--accent); }
 ::-webkit-scrollbar { width:5px; }
 ::-webkit-scrollbar-track { background:transparent; }
 ::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:3px; }
-@media(max-width:600px) { .sidebar{display:none;} .sections{padding:.9rem;} .ep-hdr{padding:1rem;} }
+@media(max-width:600px) {
+  .sidebar { display:none; }
+  .sections { padding:.9rem; }
+  .ep-hdr { padding:1rem; }
+  .hdr { padding:.5rem 1rem; }
+  .hdr-sub { display:none; }
+  select.voice-sel { max-width:130px; font-size:.65rem; }
+  .ctrl { padding:.6rem 1rem; padding-bottom:calc(.6rem + env(safe-area-inset-bottom)); }
+  .btn-play { width:56px; height:56px; font-size:1.4rem; }
+  .btn-skip { width:42px; height:42px; font-size:1rem; }
+  .spd-btn { padding:.4rem .6rem; font-size:.75rem; }
+  .status { min-width:50px; font-size:.65rem; }
+}
 @keyframes spin { to { transform:rotate(360deg); } }
 .loading-spin { display:inline-block; animation:spin .8s linear infinite; }
 </style>
@@ -330,14 +343,862 @@ Este ca o cameră cu k ferestre care glisează de-a lungul blocului → <strong>
     }
   ]
 },
-{ id:2, emoji:'🔗', title:'LinkedList', subtitle:'Lanțul de Apartamente', dur:'~12 min', tags:['LinkedList','Fast/Slow Pointers','Reverse'], locked:true, sections:[] },
-{ id:3, emoji:'📚', title:'Stack & Queue', subtitle:'Stiva și Coada', dur:'~9 min', tags:['Stack','Queue','Monotonic Stack'], locked:true, sections:[] },
-{ id:4, emoji:'🗺️', title:'HashMap & HashSet', subtitle:'Dicționarul Magic', dur:'~10 min', tags:['HashMap','HashSet','Frequency Map'], locked:true, sections:[] },
-{ id:5, emoji:'🌳', title:'Binary Tree', subtitle:'Arborele Familiei', dur:'~15 min', tags:['Tree','DFS','BFS','BST'], locked:true, sections:[] },
-{ id:6, emoji:'🔎', title:'Binary Search', subtitle:'Ghicește Numărul', dur:'~8 min', tags:['Binary Search','Template'], locked:true, sections:[] },
-{ id:7, emoji:'📊', title:'Heap / PriorityQueue', subtitle:'Coada cu Priorități', dur:'~10 min', tags:['Heap','PriorityQueue','Top K'], locked:true, sections:[] },
-{ id:8, emoji:'🌐', title:'Graphs', subtitle:'Harta Orașului', dur:'~15 min', tags:['Graph','DFS','BFS','Union-Find'], locked:true, sections:[] },
-{ id:9, emoji:'💎', title:'Dynamic Programming', subtitle:'Amintirile Calculatorului', dur:'~20 min', tags:['DP','Memoization','Tabulation'], locked:true, sections:[] }
+{ id:2, emoji:'🔗', title:'LinkedList', subtitle:'Lanțul de Cutii', dur:'~12 min',
+  tags:['LinkedList','Fast/Slow Pointers','Reverse'], locked:false,
+  sections:[
+    { lbl:'📖 Ce este un LinkedList?',
+      html:`Un <strong>LinkedList</strong> este o structură de date liniară formată din <em>noduri</em> legate prin referințe.<br><br>
+Fiecare nod conține:<br>
+• <strong>val</strong> — valoarea stocată<br>
+• <strong>next</strong> — referința spre nodul următor<br><br>
+Elementele <strong>nu sunt în memorie contiguă</strong> — pot fi oriunde în memorie, legate doar prin pointeri.`,
+      vox:`Un LinkedList este o structură de date liniară formată din noduri legate prin referințe. Fiecare nod conține val, adică valoarea stocată, și next, adică referința spre nodul următor. Elementele nu sunt în memorie contiguă — pot fi oriunde în memorie, legate doar prin pointeri.`
+    },
+    { lbl:'🔗 Analogia — Lanțul de Cutii',
+      html:`Fiecare cutie conține un bilet cu o valoare și o săgeată spre cutia următoare.<br><br>
+Cutiile nu trebuie să fie una lângă alta — contează doar că fiecare știe unde e cea următoare.<br><br>
+Prima cutie = <strong>head</strong>. Ultima cutie are săgeata spre <em>null</em>.`,
+      vox:`Fiecare cutie conține un bilet cu o valoare și o săgeată spre cutia următoare. Cutiile nu trebuie să fie una lângă alta — contează doar că fiecare știe unde e cea următoare. Prima cutie se numește head. Ultima cutie are săgeata spre null — nimeni nu urmează.`
+    },
+    { lbl:'☕ Structura Nodului în Java',
+      html:``,
+      code:`class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int val) { this.val = val; }
+}
+
+// Construim: 1 → 2 → 3 → null
+ListNode head = new ListNode(1);
+head.next = new ListNode(2);
+head.next.next = new ListNode(3);`,
+      vox:`Un nod în Java este o clasă cu val și next. Constructorul inițializează val și lasă next la null. Construim lanțul unu, doi, trei: creăm nodul unu ca head, setăm head punct next la nodul doi, și next-ul nodului doi la nodul trei.`
+    },
+    { lbl:'🔍 Traversare — O(n)',
+      html:`Nu există acces direct la index. Pentru elementul k trebuie să pornești de la <strong>head</strong> și să avansezi pas cu pas.<br><br>
+Array: acces <strong>O(1)</strong> &nbsp;•&nbsp; LinkedList: traversare <strong>O(n)</strong>`,
+      code:`public void printList(ListNode head) {
+    ListNode curr = head;
+    while (curr != null) {
+        System.out.print(curr.val + " → ");
+        curr = curr.next;
+    }
+    System.out.println("null");
+}`,
+      vox:`Nu există acces direct la index. Pentru elementul k trebuie să pornești de la head și să avansezi pas cu pas. Array-ul are acces O de unu, LinkedList-ul are traversare O de n. Parcurgem cu o variabilă curr care pornește din head, avansăm cu curr egal curr punct next la fiecare pas, și ne oprim când curr devine null.`
+    },
+    { lbl:'➕ Inserare',
+      html:`<strong>La HEAD — O(1):</strong> Creezi nod nou, setezi next spre fostul head.<br><br>
+<strong>La TAIL / MIJLOC — O(n):</strong> Traversezi până la poziție, modifici referințele.<br><br>
+Avantaj față de array: <em>nu se deplasează alte elemente</em>.`,
+      code:`// La HEAD — O(1)
+public ListNode addHead(ListNode head, int val) {
+    ListNode node = new ListNode(val);
+    node.next = head;
+    return node;
+}
+
+// La TAIL — O(n)
+public void addTail(ListNode head, int val) {
+    ListNode curr = head;
+    while (curr.next != null) curr = curr.next;
+    curr.next = new ListNode(val);
+}`,
+      vox:`Inserarea la head este O de unu: creezi un nod nou, setezi next-ul lui spre fostul head, și noul head devine nodul creat. Nu se deplasează nimic. Inserarea la tail sau la mijloc este O de n: traversezi până la poziția dorită, modifici referințele. Avantajul față de array: nu se mută alte elemente.`
+    },
+    { lbl:'🗑️ Ștergere',
+      html:`<strong>La HEAD — O(1):</strong> Head-ul devine head.next.<br><br>
+<strong>La MIJLOC — O(n):</strong> Găsești nodul anterior, setezi <em>prev.next = node.next</em>. Nodul este scurtcircuitat.`,
+      code:`// HEAD — O(1)
+public ListNode deleteHead(ListNode head) {
+    return head.next;
+}
+
+// Nod cu valoare val — O(n)
+public ListNode delete(ListNode head, int val) {
+    if (head.val == val) return head.next;
+    ListNode curr = head;
+    while (curr.next != null) {
+        if (curr.next.val == val) {
+            curr.next = curr.next.next;
+            return head;
+        }
+        curr = curr.next;
+    }
+    return head;
+}`,
+      vox:`Ștergerea la head este O de unu: head-ul devine head punct next. Ștergerea unui nod din mijloc este O de n: traversezi până la nodul anterior, setezi prev punct next egal cu node punct next. Nodul este scurtcircuitat din lanț și va fi colectat de garbage collector.`
+    },
+    { lbl:'🐢🐇 Pattern: Fast & Slow Pointers',
+      html:`Doi pointeri cu viteze diferite:<br>
+<em>slow</em> → un nod pe pas &nbsp;•&nbsp; <em>fast</em> → două noduri pe pas<br><br>
+<strong>Detectare ciclu:</strong> Dacă există ciclu, fast și slow se întâlnesc.<br>
+<strong>Mijlocul listei:</strong> Când fast atinge finalul, slow e la mijloc.`,
+      code:`public boolean hasCycle(ListNode head) {
+    ListNode slow = head, fast = head;
+    while (fast != null && fast.next != null) {
+        slow = slow.next;
+        fast = fast.next.next;
+        if (slow == fast) return true;
+    }
+    return false;
+}
+
+public ListNode findMiddle(ListNode head) {
+    ListNode slow = head, fast = head;
+    while (fast != null && fast.next != null) {
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    return slow;
+}`,
+      vox:`Fast și Slow Pointers folosește doi pointeri cu viteze diferite. Slow avansează un nod pe pas. Fast avansează două noduri pe pas. Dacă există un ciclu, fast și slow se vor întâlni inevitabil, ca doi alergători pe o pistă circulară. Dacă nu există ciclu, fast ajunge la null. Al doilea use case: când fast ajunge la final, slow se află exact la mijlocul listei.`
+    },
+    { lbl:'🔄 Pattern: Reverse LinkedList',
+      html:`Inversare în <strong>O(n)</strong> timp, <strong>O(1)</strong> spațiu cu trei pointeri: <em>prev</em>, <em>curr</em>, <em>next</em>.`,
+      code:`public ListNode reverse(ListNode head) {
+    ListNode prev = null, curr = head;
+    while (curr != null) {
+        ListNode next = curr.next;
+        curr.next = prev;  // inversăm săgeata
+        prev = curr;
+        curr = next;
+    }
+    return prev;  // noul head
+}`,
+      vox:`Inversarea unui LinkedList se face în O de n timp și O de unu spațiu. Folosim prev inițializat cu null și curr inițializat cu head. La fiecare iterație: salvăm curr punct next, inversăm săgeata setând curr punct next la prev, avansăm prev la curr, și curr la next. La final, prev devine noul head.`
+    },
+    { lbl:'📋 Rezumat',
+      html:`<strong>LinkedList</strong> — noduri legate prin pointeri<br><br>
+• Acces la index: <strong>O(n)</strong><br>
+• Inserare / Ștergere la head: <strong>O(1)</strong><br>
+• Inserare / Ștergere la mijloc: <strong>O(n)</strong><br><br>
+<strong>vs Array:</strong> Inserare la head mai rapidă, dar fără acces direct<br><br>
+<strong>Patternuri:</strong><br>
+• <em>Fast &amp; Slow</em> — ciclu, mijloc<br>
+• <em>Reverse</em> — O(n) timp, O(1) spațiu`,
+      vox:`Rezumat LinkedList. Acces la index: O de n. Inserare și ștergere la head: O de unu. Inserare și ștergere la mijloc: O de n. Față de array: inserare la head mai rapidă, dar fără acces direct la index și cu memorie suplimentară pentru pointeri. Patternul Fast și Slow detectează cicluri și găsește mijlocul. Patternul Reverse inversează lista în O de n timp și O de unu spațiu.`
+    }
+  ]
+},
+{ id:3, emoji:'📚', title:'Stack & Queue', subtitle:'Stiva și Coada', dur:'~9 min',
+  tags:['Stack','Queue','Monotonic Stack','ArrayDeque'], locked:false,
+  sections:[
+    { lbl:'📖 Stack — LIFO',
+      html:`Un <strong>Stack</strong> este o structură de date <em>LIFO</em> — Last In, First Out.<br><br>
+Ultimul element adăugat este primul extras.<br><br>
+Operații principale — toate <strong>O(1)</strong>:<br>
+• <em>push</em> — adaugă deasupra<br>
+• <em>pop</em> — extrage de deasupra<br>
+• <em>peek</em> — citește vârful fără a-l șterge`,
+      vox:`Un Stack este o structură de date LIFO — Last In, First Out. Ultimul element adăugat este primul extras. Gândește-te la o stivă de farfurii: pui și iei doar de deasupra. Operațiile principale sunt toate O de unu: push adaugă deasupra, pop extrage de deasupra, peek citește vârful fără a-l șterge.`
+    },
+    { lbl:'☕ Stack în Java',
+      html:`Evită clasa <em>Stack</em> (legacy). Folosește <strong>ArrayDeque</strong>.`,
+      code:`import java.util.ArrayDeque;
+import java.util.Deque;
+
+Deque<Integer> stack = new ArrayDeque<>();
+
+stack.push(1);    // → [1]
+stack.push(2);    // → [2, 1]
+stack.push(3);    // → [3, 2, 1]
+
+stack.peek();     // → 3  (nu șterge)
+stack.pop();      // → 3  stack=[2, 1]
+stack.isEmpty();  // → false
+stack.size();     // → 2`,
+      vox:`În Java, evită clasa Stack care este legacy. Folosește ArrayDeque ca stivă, declarând-o ca Deque de Integer. push adaugă deasupra, pop extrage de deasupra, peek citește vârful, isEmpty verifică dacă e goală, size returnează numărul de elemente. Toate operațiile sunt O de unu.`
+    },
+    { lbl:'📖 Queue — FIFO',
+      html:`Un <strong>Queue</strong> este o structură de date <em>FIFO</em> — First In, First Out.<br><br>
+Primul element adăugat este primul extras.<br><br>
+Operații principale — toate <strong>O(1)</strong>:<br>
+• <em>offer</em> — adaugă la coadă<br>
+• <em>poll</em> — extrage primul element<br>
+• <em>peek</em> — citește primul fără a-l șterge`,
+      vox:`Un Queue este o structură de date FIFO — First In, First Out. Primul element adăugat este primul extras. Gândește-te la o coadă la casă: primul venit, primul servit. Operațiile principale sunt toate O de unu: offer adaugă la coadă, poll extrage primul element, peek citește primul fără a-l șterge.`
+    },
+    { lbl:'☕ Queue în Java',
+      code:`import java.util.ArrayDeque;
+import java.util.Queue;
+
+Queue<Integer> queue = new ArrayDeque<>();
+
+queue.offer(1);   // → [1]
+queue.offer(2);   // → [1, 2]
+queue.offer(3);   // → [1, 2, 3]
+
+queue.peek();     // → 1  (nu șterge)
+queue.poll();     // → 1  queue=[2, 3]
+queue.isEmpty();  // → false`,
+      vox:`Queue în Java se implementează cu ArrayDeque, declarată ca Queue de Integer. offer adaugă la final, poll extrage primul, peek citește primul, isEmpty verifică. Toate O de unu. Nu folosi add și remove — offer și poll sunt mai sigure deoarece returnează null în loc să arunce excepție când queue-ul e gol.`
+    },
+    { lbl:'🏗️ Pattern: Monotonic Stack',
+      html:`Un <strong>Monotonic Stack</strong> menține elementele în ordine monotonă (crescătoare sau descrescătoare).<br><br>
+Folosit pentru <em>Next Greater Element</em>, <em>Largest Rectangle</em> etc.<br><br>
+La adăugarea unui element nou, eliminăm din vârf toate elementele care nu respectă ordinea.`,
+      code:`// Next Greater Element — O(n)
+public int[] nextGreater(int[] arr) {
+    int n = arr.length;
+    int[] res = new int[n];
+    Arrays.fill(res, -1);
+    Deque<Integer> stack = new ArrayDeque<>(); // stochează indecși
+
+    for (int i = 0; i < n; i++) {
+        while (!stack.isEmpty() && arr[stack.peek()] < arr[i]) {
+            res[stack.pop()] = arr[i]; // arr[i] e next greater!
+        }
+        stack.push(i);
+    }
+    return res;
+}`,
+      vox:`Monotonic Stack este o stivă care menține elementele în ordine monotonă. La adăugarea unui element nou, eliminăm din vârf toate elementele mai mici decât el. Astfel stack-ul rămâne mereu în ordine descrescătoare. Este folosit pentru Next Greater Element: când eliminăm un element din stack, am găsit first greater pentru el. Complexitate: O de n — fiecare element intră și iese din stack o singură dată.`
+    },
+    { lbl:'📋 Rezumat',
+      html:`<strong>Stack — LIFO</strong> &nbsp;•&nbsp; <code>Deque&lt;T&gt; s = new ArrayDeque&lt;&gt;()</code><br>
+• <em>push / pop / peek</em> — O(1)<br><br>
+<strong>Queue — FIFO</strong> &nbsp;•&nbsp; <code>Queue&lt;T&gt; q = new ArrayDeque&lt;&gt;()</code><br>
+• <em>offer / poll / peek</em> — O(1)<br><br>
+<strong>Monotonic Stack</strong> — Next Greater/Smaller Element: O(n)<br>
+Fiecare element intră și iese din stack o singură dată.`,
+      vox:`Rezumat Stack și Queue. Stack este LIFO implementat cu ArrayDeque: push, pop și peek în O de unu. Queue este FIFO tot cu ArrayDeque: offer, poll și peek în O de unu. Patternul Monotonic Stack rezolvă probleme de tipul Next Greater Element în O de n — fiecare element intră și iese din stack o singură dată.`
+    }
+  ]
+},
+{ id:4, emoji:'🗺️', title:'HashMap & HashSet', subtitle:'Dicționarul Magic', dur:'~10 min',
+  tags:['HashMap','HashSet','Frequency Map','getOrDefault'], locked:false,
+  sections:[
+    { lbl:'📖 Ce este un HashMap?',
+      html:`Un <strong>HashMap</strong> stochează perechi <em>cheie → valoare</em>.<br><br>
+Internamente folosește o <em>funcție hash</em> care calculează în ce bucket se pune fiecare pereche.<br><br>
+Acces, inserare, ștergere: <strong>O(1) amortizat</strong>.<br>
+Fără ordine garantată a elementelor.`,
+      vox:`Un HashMap stochează perechi cheie valoare. Internamente folosește o funcție hash care calculează în ce bucket se pune fiecare pereche. Aceasta permite acces, inserare și ștergere în O de unu amortizat. Nu există ordine garantată a elementelor.`
+    },
+    { lbl:'☕ HashMap — Metode esențiale',
+      code:`import java.util.HashMap;
+import java.util.Map;
+
+Map<String, Integer> map = new HashMap<>();
+
+map.put("ana", 3);           // adaugă / actualizează
+map.put("ion", 5);
+
+map.get("ana");              // → 3
+map.getOrDefault("luca", 0); // → 0 dacă nu există
+
+map.containsKey("ion");      // → true
+map.containsValue(5);        // → true
+map.remove("ana");
+
+for (Map.Entry<String, Integer> e : map.entrySet()) {
+    System.out.println(e.getKey() + " → " + e.getValue());
+}
+
+map.size();     // → 1
+map.isEmpty();  // → false`,
+      vox:`Metodele esențiale ale HashMap. put adaugă sau actualizează o pereche cheie valoare în O de unu. get returnează valoarea pentru o cheie. getOrDefault returnează o valoare implicită dacă cheia nu există — util pentru a evita NullPointerException. containsKey verifică existența cheii. remove șterge o pereche. Iterăm prin entrySet pentru a parcurge toate perechile.`
+    },
+    { lbl:'📖 Ce este un HashSet?',
+      html:`Un <strong>HashSet</strong> stochează valori <em>unice</em>, fără chei asociate.<br><br>
+Intern este un HashMap în care valorile sunt ignorate.<br><br>
+Operații — toate <strong>O(1) amortizat</strong>:<br>
+• <em>add</em> — adaugă dacă nu există<br>
+• <em>contains</em> — verifică existența<br>
+• <em>remove</em> — șterge`,
+      code:`import java.util.HashSet;
+
+HashSet<Integer> set = new HashSet<>();
+
+set.add(1);
+set.add(2);
+set.add(2);       // ignorat — deja există!
+
+set.contains(1);  // → true
+set.contains(9);  // → false
+set.remove(1);
+set.size();       // → 1`,
+      vox:`Un HashSet stochează valori unice, fără chei asociate. Intern este implementat ca un HashMap. Adăugarea unei valori care deja există este ignorată silențios. Operațiile add, contains și remove sunt toate O de unu amortizat.`
+    },
+    { lbl:'🎯 Pattern: Frequency Map',
+      html:`Numărarea frecvenței elementelor dintr-o colecție cu <strong>getOrDefault</strong>.`,
+      code:`// Frecvența caracterelor
+public Map<Character, Integer> freq(String s) {
+    Map<Character, Integer> map = new HashMap<>();
+    for (char c : s.toCharArray()) {
+        map.put(c, map.getOrDefault(c, 0) + 1);
+    }
+    return map;
+}
+// "aabbc" → {a:2, b:2, c:1}
+
+// Verificare anagrame — O(n)
+public boolean isAnagram(String s, String t) {
+    if (s.length() != t.length()) return false;
+    Map<Character, Integer> map = new HashMap<>();
+    for (char c : s.toCharArray()) map.put(c, map.getOrDefault(c, 0) + 1);
+    for (char c : t.toCharArray()) {
+        map.put(c, map.getOrDefault(c, 0) - 1);
+        if (map.get(c) < 0) return false;
+    }
+    return true;
+}`,
+      vox:`Frequency Map numără frecvența elementelor dintr-o colecție. Parcurgem elementele și folosim getOrDefault cu valoare implicită zero. Astfel incrementăm contorul pentru fiecare element. Este folosit frecvent pentru anagrame, gruparea elementelor sau găsirea celui mai frecvent element. Complexitate O de n timp și O de k spațiu, unde k este numărul de elemente distincte.`
+    },
+    { lbl:'🎯 Pattern: Two Sum cu HashMap',
+      html:`Problema Two Sum fără array sortat — <strong>O(n)</strong> cu HashMap.<br><br>
+Pentru fiecare element calculăm <em>complement = target - element</em>.<br>
+Dacă complementul există în map, am găsit perechea. Altfel, adăugăm elementul.`,
+      code:`public int[] twoSum(int[] nums, int target) {
+    Map<Integer, Integer> map = new HashMap<>();
+    // map: valoare → index
+
+    for (int i = 0; i < nums.length; i++) {
+        int complement = target - nums[i];
+
+        if (map.containsKey(complement)) {
+            return new int[]{map.get(complement), i};
+        }
+        map.put(nums[i], i);
+    }
+    return new int[]{};
+}`,
+      vox:`Problema Two Sum fără array sortat se rezolvă în O de n cu un HashMap. Pentru fiecare element, calculăm complementul: target minus elementul curent. Verificăm dacă complementul există în map. Dacă da, am găsit perechea. Dacă nu, adăugăm elementul curent cu indexul său și continuăm. Un singur parcurs, O de n.`
+    },
+    { lbl:'📋 Rezumat',
+      html:`<strong>HashMap&lt;K,V&gt;</strong> — perechi cheie-valoare, O(1) amortizat<br>
+• <em>put / get / getOrDefault / containsKey / remove</em><br><br>
+<strong>HashSet&lt;T&gt;</strong> — valori unice, O(1) amortizat<br>
+• <em>add / contains / remove</em><br><br>
+<strong>Patternuri:</strong><br>
+• <em>Frequency Map</em> — numărare cu getOrDefault<br>
+• <em>Two Sum</em> — complement lookup O(n)`,
+      vox:`Rezumat HashMap și HashSet. HashMap stochează perechi cheie valoare cu operații O de unu amortizat: put, get, getOrDefault, containsKey, remove. HashSet stochează valori unice cu add, contains, remove în O de unu. Patternul Frequency Map numără frecvențele cu getOrDefault. Patternul Two Sum găsește perechi cu suma dată în O de n prin complement lookup.`
+    }
+  ]
+},
+{ id:5, emoji:'🌳', title:'Binary Tree', subtitle:'Arborele Binar', dur:'~15 min',
+  tags:['Tree','DFS','BFS','BST','Recursie'], locked:false,
+  sections:[
+    { lbl:'📖 Ce este un arbore binar?',
+      html:`Un <strong>arbore binar</strong> este o structură ierarhică în care fiecare nod are <em>cel mult doi copii</em>: <strong>left</strong> și <strong>right</strong>.<br><br>
+• <strong>Root</strong> — nodul de la vârf<br>
+• <strong>Leaves</strong> — noduri fără copii<br>
+• <strong>Înălțimea (h)</strong> — numărul maxim de noduri de la root la o frunză`,
+      vox:`Un arbore binar este o structură ierarhică în care fiecare nod are cel mult doi copii: left și right. Root este nodul de la vârf. Leaves sunt nodurile fără copii. Înălțimea arborelui este numărul maxim de noduri de la root la o frunză.`
+    },
+    { lbl:'☕ Structura nodului în Java',
+      code:`class TreeNode {
+    int val;
+    TreeNode left, right;
+    TreeNode(int val) { this.val = val; }
+}
+
+//        4
+//       / \\
+//      2   6
+//     / \\ / \\
+//    1  3 5  7
+
+TreeNode root = new TreeNode(4);
+root.left  = new TreeNode(2);
+root.right = new TreeNode(6);
+root.left.left   = new TreeNode(1);
+root.left.right  = new TreeNode(3);
+root.right.left  = new TreeNode(5);
+root.right.right = new TreeNode(7);`,
+      vox:`Un nod de arbore în Java are trei câmpuri: val pentru valoare, left pentru copilul stâng și right pentru copilul drept. Construim manual arborele cu rădăcina patru, copiii doi și șase, și frunzele unu, trei, cinci, șapte.`
+    },
+    { lbl:'🔽 DFS — Cele 3 traversări',
+      html:`DFS explorează o ramură până la capăt înainte de a trece la alta. Diferența între traversări: <em>momentul în care procesăm root-ul</em>.<br><br>
+• <strong>Preorder</strong>: Root → Left → Right<br>
+• <strong>Inorder</strong>: Left → Root → Right &nbsp;<em>(returnează valorile sortate pe BST)</em><br>
+• <strong>Postorder</strong>: Left → Right → Root`,
+      code:`void preorder(TreeNode n) {
+    if (n == null) return;
+    System.out.print(n.val + " "); // Root
+    preorder(n.left);              // Left
+    preorder(n.right);             // Right
+}
+
+void inorder(TreeNode n) {
+    if (n == null) return;
+    inorder(n.left);               // Left
+    System.out.print(n.val + " "); // Root
+    inorder(n.right);              // Right
+}
+
+void postorder(TreeNode n) {
+    if (n == null) return;
+    postorder(n.left);             // Left
+    postorder(n.right);            // Right
+    System.out.print(n.val + " "); // Root
+}`,
+      vox:`DFS explorează o ramură până la capăt. Există trei traversări în funcție de ordinea de procesare a root-ului. Preorder: Root, Left, Right — root-ul primul. Inorder: Left, Root, Right — pe un BST returnează elementele în ordine crescătoare. Postorder: Left, Right, Root — root-ul ultimul, util pentru ștergerea arborelui sau calculul înălțimii. Toate sunt O de n.`
+    },
+    { lbl:'➡️ BFS — Nivel cu nivel',
+      html:`BFS parcurge arborele <em>nivel cu nivel</em>, de la stânga la dreapta, folosind un <strong>Queue</strong>.`,
+      code:`public List<List<Integer>> levelOrder(TreeNode root) {
+    List<List<Integer>> res = new ArrayList<>();
+    if (root == null) return res;
+
+    Queue<TreeNode> q = new ArrayDeque<>();
+    q.offer(root);
+
+    while (!q.isEmpty()) {
+        int size = q.size();          // noduri pe nivelul curent
+        List<Integer> level = new ArrayList<>();
+
+        for (int i = 0; i < size; i++) {
+            TreeNode node = q.poll();
+            level.add(node.val);
+            if (node.left  != null) q.offer(node.left);
+            if (node.right != null) q.offer(node.right);
+        }
+        res.add(level);
+    }
+    return res;  // O(n) timp, O(n) spațiu
+}`,
+      vox:`BFS parcurge arborele nivel cu nivel. Adăugăm root-ul în queue. La fiecare iterație a buclei while, procesăm toate nodurile de pe nivelul curent: le extragem din queue și adăugăm copiii lor pentru nivelul următor. Dimensiunea queue-ului la start de buclă ne spune câte noduri sunt pe nivelul curent. Complexitate O de n timp și O de n spațiu.`
+    },
+    { lbl:'🔍 Binary Search Tree — BST',
+      html:`Proprietatea BST: pentru orice nod N:<br>
+• Tot subarborele <em>stâng</em> &lt; N.val<br>
+• Tot subarborele <em>drept</em> &gt; N.val<br><br>
+Permite <strong>căutare, inserare, ștergere în O(log n)</strong> pe arbore echilibrat.`,
+      code:`// Căutare în BST
+TreeNode search(TreeNode root, int target) {
+    if (root == null || root.val == target) return root;
+    if (target < root.val) return search(root.left, target);
+    else                   return search(root.right, target);
+}
+
+// Inserare în BST
+TreeNode insert(TreeNode root, int val) {
+    if (root == null) return new TreeNode(val);
+    if (val < root.val) root.left  = insert(root.left,  val);
+    else                root.right = insert(root.right, val);
+    return root;
+}`,
+      vox:`Un BST respectă proprietatea: pentru orice nod, tot subarborele stâng este mai mic, iar tot subarborele drept este mai mare. Căutarea funcționează ca binary search: dacă valoarea e mai mică decât nodul curent, mergem stânga; dacă e mai mare, mergem dreapta. Pe arbore echilibrat: O de log n. Pe arbore dezechilibrat degradează la O de n.`
+    },
+    { lbl:'📋 Rezumat',
+      html:`<strong>Binary Tree</strong> — fiecare nod are cel mult 2 copii<br><br>
+<strong>DFS — O(n), O(h) spațiu:</strong><br>
+• Preorder: Root → L → R<br>
+• Inorder: L → Root → R &nbsp;<em>(sortare BST)</em><br>
+• Postorder: L → R → Root<br><br>
+<strong>BFS — O(n):</strong> nivel cu nivel, cu Queue<br><br>
+<strong>BST:</strong> stânga &lt; nod &lt; dreapta → O(log n) echilibrat`,
+      vox:`Rezumat Binary Tree. Fiecare nod are cel mult doi copii: left și right. DFS are trei traversări: preorder Root Left Right, inorder Left Root Right care returnează elementele sortate pe BST, și postorder Left Right Root. BFS parcurge nivel cu nivel cu Queue. BST respectă proprietatea stânga mai mic, dreapta mai mare, permițând operații O de log n pe arbore echilibrat. Toate traversările: O de n timp, O de h spațiu unde h este înălțimea.`
+    }
+  ]
+},
+{ id:6, emoji:'🔎', title:'Binary Search', subtitle:'Înjumătățire repetată', dur:'~8 min',
+  tags:['Binary Search','Template','Sorted Array'], locked:false,
+  sections:[
+    { lbl:'📖 Ce este Binary Search?',
+      html:`<strong>Binary Search</strong> caută într-o colecție <em>sortată</em> eliminând jumătate din candidați la fiecare pas.<br><br>
+Complexitate: <strong>O(log n)</strong> — pentru 1.000.000 de elemente, maxim ~20 comparații.<br><br>
+<strong>Condiție necesară: colecția trebuie să fie sortată.</strong>`,
+      vox:`Binary Search caută într-o colecție sortată eliminând jumătate din candidați la fiecare pas. Complexitate: O de log n. Pentru un milion de elemente, maxim douăzeci de comparații. Condiție necesară: colecția trebuie să fie sortată.`
+    },
+    { lbl:'☕ Template iterativ standard',
+      html:`Cei trei pointeri: <em>left</em>, <em>right</em>, <em>mid</em>.<br><br>
+Calculul mid: <code>left + (right - left) / 2</code> — evită overflow față de <code>(left + right) / 2</code>.`,
+      code:`public int binarySearch(int[] arr, int target) {
+    int left = 0, right = arr.length - 1;
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+
+        if      (arr[mid] == target) return mid;
+        else if (arr[mid] <  target) left  = mid + 1;
+        else                         right = mid - 1;
+    }
+    return -1;  // nu există
+}`,
+      vox:`Template-ul standard folosește trei pointeri: left la zero, right la ultimul index, și mid calculat la fiecare pas. Mid egal left plus right minus left împărțit la doi — această formulă evită overflow. Dacă elementul din mijloc este egal cu target, returnăm indexul. Dacă e mai mic, mutăm left la mid plus unu. Dacă e mai mare, mutăm right la mid minus unu. Ne oprim când left devine mai mare decât right.`
+    },
+    { lbl:'📍 Variație: Prima și ultima apariție',
+      html:`Când array-ul conține <em>duplicate</em> și ai nevoie de prima sau ultima apariție.<br><br>
+La egalitate: continuăm căutarea în direcția dorită în loc să ne oprim.`,
+      code:`// Prima apariție
+public int firstOccurrence(int[] arr, int target) {
+    int left = 0, right = arr.length - 1, result = -1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (arr[mid] == target) { result = mid; right = mid - 1; } // continuăm stânga
+        else if (arr[mid] < target) left = mid + 1;
+        else right = mid - 1;
+    }
+    return result;
+}
+
+// Ultima apariție: la egalitate → left = mid + 1, result = mid`,
+      vox:`Când array-ul conține duplicate și ai nevoie de prima apariție, modificăm template-ul: la egalitate, salvăm indexul în result și continuăm în jumătatea stângă setând right la mid minus unu. Astfel ajungem la prima apariție. Pentru ultima apariție, la egalitate continuăm în jumătatea dreaptă setând left la mid plus unu.`
+    },
+    { lbl:'🎯 Binary Search pe spațiul de răspunsuri',
+      html:`Binary Search nu se aplică doar pe array-uri, ci și pe un <em>interval de valori posibile</em>.<br><br>
+Dacă putem scrie o funcție <em>canAchieve(value)</em> care returnează true/false monoton, putem face binary search pe interval.`,
+      code:`// Găsește capacitatea minimă de transport pentru a livra în D zile
+public int shipInDDays(int[] weights, int D) {
+    int left  = Arrays.stream(weights).max().getAsInt(); // min posibil
+    int right = Arrays.stream(weights).sum();             // max posibil
+
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+        if (canShip(weights, mid, D)) right = mid;
+        else                          left  = mid + 1;
+    }
+    return left;
+}
+
+boolean canShip(int[] w, int cap, int D) {
+    int days = 1, curr = 0;
+    for (int x : w) {
+        if (curr + x > cap) { days++; curr = 0; }
+        curr += x;
+    }
+    return days <= D;
+}`,
+      vox:`Binary search pe răspunsuri: nu căutăm un element, ci cea mai mică sau cea mai mare valoare validă dintr-un interval. Dacă putem scrie o funcție care verifică dacă o valoare este validă, și răspunsurile valide formează un interval continuu, putem face binary search pe acel interval. Exemplu: găsește capacitatea minimă de transport pentru a livra colete în D zile. Căutăm pe intervalul de capacități posibile.`
+    },
+    { lbl:'📋 Rezumat',
+      html:`<strong>Binary Search — O(log n)</strong> — doar pe colecții sortate<br><br>
+<strong>Template:</strong> <code>left=0, right=n-1, mid=left+(right-left)/2</code><br>
+• Egalitate → return mid<br>
+• Mai mic → left = mid+1<br>
+• Mai mare → right = mid-1<br><br>
+<strong>Variații:</strong><br>
+• Prima apariție: la egalitate → right = mid-1<br>
+• Ultima apariție: la egalitate → left = mid+1<br>
+• Pe răspunsuri: binary search pe intervalul de valori posibile`,
+      vox:`Rezumat Binary Search. Complexitate O de log n, funcționează doar pe colecții sortate. Template standard: left zero, right n minus unu, mid egal left plus right minus left împărțit la doi. La egalitate returnăm; mai mic, mutăm left; mai mare, mutăm right. Variații: pentru prima apariție, la egalitate continuăm stânga; pentru ultima, continuăm dreapta. Binary search pe răspunsuri: căutăm pe intervalul valorilor posibile când putem verifica validitatea monoton.`
+    }
+  ]
+},
+{ id:7, emoji:'📊', title:'Heap / PriorityQueue', subtitle:'Coada cu Priorități', dur:'~10 min',
+  tags:['Heap','PriorityQueue','Min-Heap','Max-Heap','Top K'], locked:false,
+  sections:[
+    { lbl:'📖 Ce este un Heap?',
+      html:`Un <strong>Heap</strong> este un arbore binar <em>complet</em> cu proprietate de ordine:<br><br>
+• <strong>Min-Heap:</strong> fiecare nod ≤ copiii săi → rădăcina = <em>minimul global</em><br>
+• <strong>Max-Heap:</strong> fiecare nod ≥ copiii săi → rădăcina = <em>maximul global</em><br><br>
+Operații:<br>
+• Inserare: <strong>O(log n)</strong><br>
+• Extragere min/max: <strong>O(log n)</strong><br>
+• Citire min/max: <strong>O(1)</strong>`,
+      vox:`Un Heap este un arbore binar complet cu proprietate de ordine. Min-Heap: fiecare nod este mai mic sau egal cu copiii săi, deci rădăcina este minimul global. Max-Heap: fiecare nod este mai mare sau egal cu copiii săi, deci rădăcina este maximul global. Inserare și extragere: O de log n. Citire min sau max: O de unu.`
+    },
+    { lbl:'☕ PriorityQueue în Java',
+      code:`import java.util.PriorityQueue;
+import java.util.Collections;
+
+// MIN-HEAP (default)
+PriorityQueue<Integer> minH = new PriorityQueue<>();
+minH.offer(5); minH.offer(1); minH.offer(3);
+minH.peek();   // → 1  (minimul, fără ștergere)
+minH.poll();   // → 1  (extrage minimul)
+
+// MAX-HEAP
+PriorityQueue<Integer> maxH = new PriorityQueue<>(Collections.reverseOrder());
+maxH.offer(5); maxH.offer(1); maxH.offer(3);
+maxH.peek();   // → 5  (maximul)
+maxH.poll();   // → 5  (extrage maximul)
+
+// HEAP DE OBIECTE — sortare după un câmp
+PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);`,
+      vox:`Java implementează Heap prin PriorityQueue. PriorityQueue standard este Min-Heap: offer adaugă în O de log n, poll extrage minimul în O de log n, peek citește minimul în O de unu. Pentru Max-Heap, creăm PriorityQueue cu Collections punct reverseOrder. Pentru obiecte, definim un comparator lambda.`
+    },
+    { lbl:'🎯 Pattern: Top K Elements',
+      html:`Găsește cele mai mari <em>K</em> elemente dintr-o colecție.<br><br>
+<strong>Strategie:</strong> Min-Heap de dimensiune K.<br>
+• Dacă elementul nou &gt; minimul heap-ului → înlocuiește minimul<br>
+• La final, heap-ul conține top K<br><br>
+Complexitate: <strong>O(n log k)</strong> — eficient când k &lt;&lt; n`,
+      code:`public int[] topKLargest(int[] nums, int k) {
+    PriorityQueue<Integer> heap = new PriorityQueue<>(); // min-heap
+
+    for (int num : nums) {
+        heap.offer(num);
+        if (heap.size() > k) heap.poll(); // elimină cel mai mic
+    }
+
+    int[] res = new int[k];
+    for (int i = k - 1; i >= 0; i--) res[i] = heap.poll();
+    return res;
+}
+
+// K-th Largest Element
+public int kthLargest(int[] nums, int k) {
+    PriorityQueue<Integer> heap = new PriorityQueue<>();
+    for (int num : nums) {
+        heap.offer(num);
+        if (heap.size() > k) heap.poll();
+    }
+    return heap.peek(); // al k-lea cel mai mare
+}`,
+      vox:`Patternul Top K folosește un Min-Heap de dimensiune K. Parcurgem elementele și adăugăm fiecare în heap. Dacă heap-ul depășește K elemente, eliminăm minimul. Astfel, la final heap-ul conține exact cele mai mari K elemente. Vârful heap-ului este al K-lea cel mai mare element. Complexitate: O de n log k — eficient când K este mic față de n.`
+    },
+    { lbl:'📋 Rezumat',
+      html:`<strong>Heap</strong> — arbore binar complet cu proprietate de ordine<br><br>
+• <strong>Min-Heap:</strong> rădăcina = minim global<br>
+• <strong>Max-Heap:</strong> rădăcina = maxim global<br><br>
+<strong>Java — PriorityQueue:</strong><br>
+• <em>offer</em> — inserare: O(log n)<br>
+• <em>poll</em> — extrage min/max: O(log n)<br>
+• <em>peek</em> — citește min/max: O(1)<br>
+• Max-Heap: <code>new PriorityQueue&lt;&gt;(Collections.reverseOrder())</code><br><br>
+<strong>Pattern Top K:</strong> Min-Heap de dim K → O(n log k)`,
+      vox:`Rezumat Heap și PriorityQueue. Min-Heap: rădăcina este minimul global. Max-Heap: rădăcina este maximul global. În Java, PriorityQueue standard este Min-Heap. offer inserează în O de log n, poll extrage în O de log n, peek citește în O de unu. Pentru Max-Heap, folosim Collections punct reverseOrder. Patternul Top K Elements: Min-Heap de dimensiune K, complexitate O de n log k.`
+    }
+  ]
+},
+{ id:8, emoji:'🌐', title:'Graphs', subtitle:'Noduri și Muchii', dur:'~15 min',
+  tags:['Graph','DFS','BFS','Union-Find','Adjacency List'], locked:false,
+  sections:[
+    { lbl:'📖 Ce este un Graf?',
+      html:`Un <strong>graf</strong> este o colecție de <em>noduri (vertices)</em> conectate prin <em>muchii (edges)</em>.<br><br>
+• <strong>Neorientat:</strong> muchia A—B înseamnă și B—A<br>
+• <strong>Orientat (Digraph):</strong> muchia A→B nu implică B→A<br>
+• <strong>Ponderat:</strong> fiecare muchie are un cost<br>
+• <strong>Ciclic / Aciclic (DAG)</strong>`,
+      vox:`Un graf este o colecție de noduri conectate prin muchii. Graful neorientat: muchia dintre A și B este bidirecțională. Graful orientat sau digraph: muchia de la A la B nu implică muchia de la B la A. Graful ponderat are un cost asociat fiecărei muchii. Un graf aciclic orientat se numește DAG.`
+    },
+    { lbl:'☕ Reprezentare — Adjacency List',
+      html:`Cea mai eficientă reprezentare pentru grafuri rare: fiecare nod are lista vecinilor săi.<br><br>
+Spațiu: <strong>O(V + E)</strong> unde V = noduri, E = muchii.`,
+      code:`int n = 5; // 5 noduri: 0..4
+List<Integer>[] graph = new ArrayList[n];
+for (int i = 0; i < n; i++) graph[i] = new ArrayList<>();
+
+// Adăugăm muchii neorientate
+void addEdge(int u, int v) {
+    graph[u].add(v);
+    graph[v].add(u); // omit pentru graf orientat
+}
+
+addEdge(0, 1); addEdge(0, 2);
+addEdge(1, 3); addEdge(2, 3); addEdge(3, 4);
+// 0: [1,2]   1: [0,3]   2: [0,3]   3: [1,2,4]   4: [3]`,
+      vox:`Reprezentarea prin liste de adiacență: fiecare nod are un ArrayList cu vecinii săi. Spațiu: O de V plus E. Pentru graf neorientat, fiecare muchie se adaugă în ambele direcții. Pentru graf orientat, se adaugă doar în direcția muchiei.`
+    },
+    { lbl:'🔽 DFS pe Graf',
+      html:`DFS explorează cât mai adânc posibil, marcând nodurile vizitate pentru a evita ciclurile.<br><br>
+Util pentru: <em>componente conexe, detectare ciclu, topological sort</em>.`,
+      code:`// DFS recursiv — O(V + E)
+void dfs(int node, boolean[] visited, List<Integer>[] g) {
+    visited[node] = true;
+    System.out.print(node + " ");
+    for (int neighbor : g[node]) {
+        if (!visited[neighbor]) dfs(neighbor, visited, g);
+    }
+}
+
+// DFS iterativ cu Stack
+void dfsIter(int start, List<Integer>[] g) {
+    boolean[] visited = new boolean[g.length];
+    Deque<Integer> stack = new ArrayDeque<>();
+    stack.push(start);
+    while (!stack.isEmpty()) {
+        int node = stack.pop();
+        if (visited[node]) continue;
+        visited[node] = true;
+        System.out.print(node + " ");
+        for (int nb : g[node]) if (!visited[nb]) stack.push(nb);
+    }
+}`,
+      vox:`DFS pe graf explorează cât mai adânc posibil, marcând nodurile vizitate pentru a evita ciclurile. Varianta recursivă: marcăm nodul curent ca vizitat, procesăm toți vecinii nevizitați recursiv. Varianta iterativă: folosim un Stack explicit. Complexitate: O de V plus E — vizităm fiecare nod și fiecare muchie o singură dată.`
+    },
+    { lbl:'➡️ BFS pe Graf',
+      html:`BFS explorează nivelurile — mai întâi toți vecinii direcți, apoi vecinii vecinilor.<br><br>
+Găsește <strong>calea cea mai scurtă</strong> în grafuri neponderate.`,
+      code:`// BFS — O(V + E)
+int[] bfs(int start, List<Integer>[] g) {
+    int[] dist = new int[g.length];
+    Arrays.fill(dist, -1);
+    dist[start] = 0;
+
+    Queue<Integer> q = new ArrayDeque<>();
+    q.offer(start);
+
+    while (!q.isEmpty()) {
+        int node = q.poll();
+        for (int nb : g[node]) {
+            if (dist[nb] == -1) {
+                dist[nb] = dist[node] + 1;
+                q.offer(nb);
+            }
+        }
+    }
+    return dist; // dist[i] = distanța minimă de la start la i
+}`,
+      vox:`BFS explorează nivelurile cu un Queue. Adăugăm nodul de start cu distanța zero. La fiecare pas, extragem un nod și adăugăm vecinii nevizitați cu distanța plus unu. BFS garantează că prima dată când ajungi la un nod, ai găsit calea cea mai scurtă. Complexitate: O de V plus E.`
+    },
+    { lbl:'🔄 Union-Find',
+      html:`Structură de date pentru componente conexe și detectarea ciclurilor.<br><br>
+• <strong>find(x)</strong> — găsește reprezentantul componentei lui x<br>
+• <strong>union(x, y)</strong> — unește componentele lui x și y<br><br>
+Cu <em>path compression</em> + <em>union by rank</em>: <strong>O(α(n)) ≈ O(1)</strong>`,
+      code:`class UnionFind {
+    int[] parent, rank;
+    UnionFind(int n) {
+        parent = new int[n]; rank = new int[n];
+        for (int i = 0; i < n; i++) parent[i] = i;
+    }
+    int find(int x) {
+        if (parent[x] != x) parent[x] = find(parent[x]); // path compression
+        return parent[x];
+    }
+    boolean union(int x, int y) {
+        int px = find(x), py = find(y);
+        if (px == py) return false; // deja conectați → ciclu!
+        if (rank[px] < rank[py]) { int t = px; px = py; py = t; }
+        parent[py] = px;
+        if (rank[px] == rank[py]) rank[px]++;
+        return true;
+    }
+}`,
+      vox:`Union-Find gestionează componente conexe. find returnează reprezentantul componentei unui nod, cu path compression — face fiecare nod să pointeze direct la rădăcină, accelerând apelurile viitoare. union unește două componente cu union by rank — arborele mai scund se atașează la cel mai înalt. Dacă find de x egal find de y, nodurile sunt deja în aceeași componentă — am detectat un ciclu.`
+    },
+    { lbl:'📋 Rezumat',
+      html:`<strong>Graf</strong> = V noduri + E muchii<br><br>
+<strong>Reprezentare:</strong> Adjacency List — O(V + E) spațiu<br><br>
+<strong>DFS — O(V+E):</strong> adâncime, componente conexe, ciclu, topological sort<br>
+<strong>BFS — O(V+E):</strong> pe niveluri, calea cea mai scurtă (neponderat)<br>
+<strong>Union-Find — O(α(n)):</strong> componente conexe, detectare ciclu`,
+      vox:`Rezumat Graphs. Un graf are V noduri și E muchii. Reprezentarea preferată: adjacency list în O de V plus E spațiu. DFS explorează în adâncime în O de V plus E, util pentru componente conexe, detectare ciclu și topological sort. BFS explorează pe niveluri în O de V plus E, garantând calea cea mai scurtă în grafuri neponderate. Union-Find gestionează componente conexe cu operații aproape constante.`
+    }
+  ]
+},
+{ id:9, emoji:'💎', title:'Dynamic Programming', subtitle:'Memoizare și Tabulare', dur:'~20 min',
+  tags:['DP','Memoization','Tabulation','Subprobleme'], locked:false,
+  sections:[
+    { lbl:'📖 Ce este Dynamic Programming?',
+      html:`<strong>Dynamic Programming (DP)</strong> se aplică problemelor cu:<br><br>
+1. <em>Subprobleme suprapuse</em> — aceleași subprobleme se rezolvă de mai multe ori<br>
+2. <em>Substructură optimă</em> — soluția optimă conține soluțiile optime ale subproblemelor<br><br>
+DP <strong>memorează rezultatele</strong> subproblemelor pentru a evita recalcularea.`,
+      vox:`Dynamic Programming se aplică problemelor cu două proprietăți. Prima: subprobleme suprapuse — aceleași subprobleme se rezolvă de mai multe ori în recursie simplă. A doua: substructură optimă — soluția optimă conține soluțiile optime ale subproblemelor. DP memorează rezultatele subproblemelor, transformând complexitatea exponențială în polinomială.`
+    },
+    { lbl:'🔁 Memoization — Top-Down',
+      html:`Recursie cu cache — pornești de la problema mare, o spargi în subprobleme, memorezi rezultatele.`,
+      code:`// Fibonacci fără DP: O(2^n) — exponențial!
+int fib(int n) {
+    if (n <= 1) return n;
+    return fib(n-1) + fib(n-2);
+}
+
+// Cu Memoization: O(n) timp, O(n) spațiu
+int fibMemo(int n, int[] memo) {
+    if (n <= 1) return n;
+    if (memo[n] != 0) return memo[n]; // deja calculat!
+    memo[n] = fibMemo(n-1, memo) + fibMemo(n-2, memo);
+    return memo[n];
+}
+// Apel: fibMemo(40, new int[41])`,
+      vox:`Memoization este abordarea top-down: scriem recursie normală dar adăugăm un cache. Înainte de a calcula, verificăm dacă rezultatul există deja în cache. Dacă da, îl returnăm direct. Fibonacci fără DP are complexitate exponențială O de doi la n. Cu memoization devine O de n timp și O de n spațiu.`
+    },
+    { lbl:'📊 Tabulation — Bottom-Up',
+      html:`Rezolvi mai întâi subproblemele mici, construiești progresiv soluția. Iterativ, fără recursie.`,
+      code:`// Fibonacci cu Tabulation: O(n) timp, O(n) spațiu
+int fibTab(int n) {
+    if (n <= 1) return n;
+    int[] dp = new int[n + 1];
+    dp[0] = 0; dp[1] = 1;
+    for (int i = 2; i <= n; i++)
+        dp[i] = dp[i-1] + dp[i-2];
+    return dp[n];
+}
+
+// Optimizat spațiu: O(1)
+int fibOpt(int n) {
+    if (n <= 1) return n;
+    int a = 0, b = 1;
+    for (int i = 2; i <= n; i++) {
+        int c = a + b; a = b; b = c;
+    }
+    return b;
+}`,
+      vox:`Tabulation este abordarea bottom-up: rezolvi subproblemele mici și construiești progresiv soluția mare. Nu folosești recursie — parcurgi iterativ și completezi o tabelă DP. Pentru Fibonacci: dp de zero egal zero, dp de unu egal unu, și pentru fiecare i de la doi la n calculăm dp de i egal dp de i minus unu plus dp de i minus doi. Dacă fiecare valoare depinde doar de ultimele două, optimizăm spațiul la O de unu.`
+    },
+    { lbl:'🎯 Pattern: Coin Change',
+      html:`Numărul minim de monede pentru o sumă dată.<br><br>
+<em>dp[i]</em> = minim de monede pentru suma i &nbsp;•&nbsp; <em>dp[0] = 0</em>`,
+      code:`public int coinChange(int[] coins, int amount) {
+    int[] dp = new int[amount + 1];
+    Arrays.fill(dp, amount + 1);  // "imposibil"
+    dp[0] = 0;
+
+    for (int i = 1; i <= amount; i++) {
+        for (int coin : coins) {
+            if (coin <= i)
+                dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+        }
+    }
+    return dp[amount] > amount ? -1 : dp[amount];
+}`,
+      vox:`Coin Change: dp de i este numărul minim de monede pentru suma i. Inițializăm cu o valoare imposibil de mare, dp de zero egal zero. Pentru fiecare sumă de la unu la amount, parcurgem monedele și actualizăm dp de i ca minimul dintre valoarea curentă și dp de i minus coin plus unu. Complexitate: O de amount ori numărul de monede.`
+    },
+    { lbl:'🎯 Pattern: 0/1 Knapsack',
+      html:`Valoarea maximă cu greutate limitată. Fiecare obiect: îl iei sau nu.<br><br>
+<em>dp[i][w]</em> = valoarea maximă folosind primele i obiecte cu capacitate w`,
+      code:`public int knapsack(int[] w, int[] v, int cap) {
+    int n = w.length;
+    int[][] dp = new int[n+1][cap+1];
+
+    for (int i = 1; i <= n; i++) {
+        for (int c = 0; c <= cap; c++) {
+            dp[i][c] = dp[i-1][c];           // nu luăm obiectul i
+            if (w[i-1] <= c)
+                dp[i][c] = Math.max(dp[i][c],
+                    dp[i-1][c - w[i-1]] + v[i-1]); // îl luăm
+        }
+    }
+    return dp[n][cap];
+}`,
+      vox:`Zero unu Knapsack: dp de i virgulă c este valoarea maximă folosind primele i obiecte cu capacitate c. Pentru fiecare obiect avem două alegeri: nu îl luăm, caz în care dp de i virgulă c egal dp de i minus unu virgulă c; sau îl luăm dacă încape, caz în care adăugăm valoarea lui la soluția pentru capacitatea rămasă. Luăm maximul dintre cele două.`
+    },
+    { lbl:'🎯 Pattern: Longest Common Subsequence',
+      html:`LCS — cea mai lungă subsecvență comună a două string-uri (elementele nu trebuie consecutive).<br><br>
+<em>dp[i][j]</em> = lungimea LCS pentru primele i caractere din s1 și j din s2`,
+      code:`public int lcs(String s1, String s2) {
+    int m = s1.length(), n = s2.length();
+    int[][] dp = new int[m+1][n+1];
+
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            if (s1.charAt(i-1) == s2.charAt(j-1))
+                dp[i][j] = dp[i-1][j-1] + 1;
+            else
+                dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
+        }
+    }
+    return dp[m][n];
+}
+// lcs("ABCBDAB", "BDCAB") → 4`,
+      vox:`Longest Common Subsequence: dp de i virgulă j este lungimea LCS pentru primele i caractere din s1 și j caractere din s2. Dacă caracterele curente sunt egale, dp de i virgulă j egal dp de i minus unu virgulă j minus unu plus unu. Altfel, luăm maximul între dp de i minus unu virgulă j și dp de i virgulă j minus unu. Complexitate O de m ori n timp și spațiu.`
+    },
+    { lbl:'📋 Pași pentru orice problemă DP',
+      html:`<strong>1. Definește starea</strong><br>
+&nbsp;&nbsp;Ce reprezintă <em>dp[i]</em> sau <em>dp[i][j]</em>?<br><br>
+<strong>2. Tranziția</strong><br>
+&nbsp;&nbsp;Cum se calculează dp[i] din valori anterioare?<br><br>
+<strong>3. Cazul de bază</strong><br>
+&nbsp;&nbsp;dp[0] = ?, dp[0][0] = ?<br><br>
+<strong>4. Răspunsul final</strong><br>
+&nbsp;&nbsp;dp[n], dp[m][n], min/max din dp?<br><br>
+<strong>Patternuri:</strong><br>
+• <em>Fibonacci</em>: dp[i] = dp[i-1] + dp[i-2]<br>
+• <em>Coin Change</em>: min de resurse<br>
+• <em>0/1 Knapsack</em>: alegere binară la fiecare pas<br>
+• <em>LCS / Edit Distance</em>: dp 2D pe două string-uri`,
+      vox:`Pașii pentru orice problemă de DP. Unu: definești starea — ce reprezintă dp de i sau dp de i virgulă j? Doi: identifici tranziția — cum se calculează dp de i din valori anterioare? Trei: stabilești cazul de bază — dp de zero sau dp de zero virgulă zero. Patru: identifici răspunsul final — dp de n, minimul sau maximul din dp. Patternuri frecvente: Fibonacci, Coin Change pentru minimul de resurse, zero unu Knapsack pentru alegeri binare, și LCS sau Edit Distance pentru probleme pe două string-uri.`
+    }
+  ]
+}
 ];
 
 // ─── STATE ────────────────────────────────────────────────────────────────────
